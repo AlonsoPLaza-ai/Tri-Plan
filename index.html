@@ -147,7 +147,7 @@ function buildWeek(w) {
   return [
     { d: "Mon", label: "Bike and strength", ses: [
       { h: "8:30 AM", t: "bike", x: `Bike ${bMon} min · ${easyBike} · your light class day, so this one goes outdoors as long as it is light` },
-      { h: "11:00 AM", t: "gym",  x: `Full body A · ${gymLen} · ${setNote} · pull emphasis` },
+      { h: "11:00 AM", t: "gym",  x: `Day 2 · back, chest, core · ${gymLen} · upper body only, so Tuesday's run threshold stays untouched` },
     ] },
     { d: "Tue", label: hasR ? "Run threshold and swim" : "Aerobic", ses: [
       { h: "6:45 AM", t: "run",  x: runThr
@@ -157,9 +157,9 @@ function buildWeek(w) {
           ? `Threshold · ${swimThr} · plus warm-up and cool-down to ${r1(sw * s.mon)} km`
           : `Swim ${r1(sw * s.mon)} km · zone 2 at about ${easySwim(w.n)}/100 m · 30% technique drills` },
     ] },
-    { d: "Wed", label: "Swim and calisthenics", ses: [
+    { d: "Wed", label: "Swim and legs", ses: [
       { h: "7:00 PM", t: "swim", x: `Swim ${r1(sw * s.wed)} km · zone 2 at about ${easySwim(w.n)}/100 m · continuous aerobic` },
-      { h: "After", t: "cali", x: `Calisthenics at home · ${w.type === "load" ? "25 min" : "15 min"} · your own routine · moderate, light on the legs, finish able to talk` },
+      { h: "After", t: "gym", x: `Day 1 · legs · ${gymLen} · the only heavy leg session of the week` },
     ] },
     { d: "Thu", label: hasB ? "Bike threshold" : "Bike aerobic", ses: [
       { h: "7:00 PM", t: "bike", x: test
@@ -175,7 +175,7 @@ function buildWeek(w) {
       { h: "8:15 AM", t: "swim", x: test
           ? `Time trial · 1,000 m maximum effort · full warm-up first`
           : `Swim ${r1(sw * s.fri)} km · technique only, no set` },
-      { h: "Evening", t: "gym",  x: `Full body B · ${gymLen} · ${setNote} · push, shoulder and posterior chain` },
+      { h: "Evening", t: "gym",  x: `Day 3 · shoulders, arms, core · ${gymLen} · the lightest of the three, Saturday is tomorrow` },
     ] },
     { d: "Sat", label: out ? "Long ride outdoors and brick" : "Long ride and brick", ses: [
       { h: "9:00 AM", t: "bike", x: satText },
@@ -223,21 +223,21 @@ const OTHER_WEEKS = {
   2: [
     { d: "Mon", label: "Swim threshold and strength", ses: [
       { h: "6:30 AM", t: "bike", x: "Bike 70 min · zone 2 · 26 km/h" },
-      { h: "8:00 AM", t: "gym", x: "Full body A · 60 min · heavy, 4 to 8 reps" },
+      { h: "8:00 AM", t: "gym", x: "Day 2 · back, chest, core · 60 min · heavy, 4 to 8 reps" },
       { h: "5:00 PM", t: "swim", x: "Threshold · 5 × 400 m at 1:38/100 m · 60 s rest" } ] },
     { d: "Tue", label: "Run threshold with the team", ses: [
       { h: "6:30 AM", t: "bike", x: "Bike 60 min · zone 2 only · this ride exists to keep Tuesday's run honest" },
       { h: "5:00 PM", t: "run", x: "Threshold · 5 × 1 km at 4:30/km · 90 s jog · 170–182 bpm" } ] },
     { d: "Wed", label: "Easy day", ses: [
       { h: "6:30 AM", t: "run", x: "Run 11 km easy · 5:30/km · under 155 bpm" },
-      { h: "8:00 AM", t: "gym", x: "Full body B · 60 min" },
+      { h: "8:00 AM", t: "gym", x: "Day 3 · shoulders, arms, core · 60 min" },
       { h: "5:00 PM", t: "swim", x: "Swim 3.0 km · zone 2 aerobic" } ] },
     { d: "Thu", label: "Bike threshold", ses: [
       { h: "2:00 PM", t: "bike", x: "Threshold · 3 × 12 min at 170–182 bpm" },
       { h: "Rest of day", t: "mob", x: "Nothing else" } ] },
     { d: "Fri", label: "Easy day", ses: [
       { h: "6:30 AM", t: "run", x: "Run 10 km easy · 5:30/km" },
-      { h: "8:00 AM", t: "gym", x: "Full body C · 60 min" },
+      { h: "8:00 AM", t: "gym", x: "Day 1 · legs · 60 min" },
       { h: "5:00 PM", t: "swim", x: "Swim 2.5 km · technique only" } ] },
     { d: "Sat", label: "Long ride and brick", ses: [
       { h: "8:00 AM", t: "bike", x: "Bike 4:00 to 4:30 · zone 2 · outdoors · full race fuelling" },
@@ -249,21 +249,21 @@ const OTHER_WEEKS = {
   3: [
     { d: "Mon", label: "Swim threshold and strength", ses: [
       { h: "6:30 AM", t: "bike", x: "Bike 60 min · zone 2" },
-      { h: "8:00 AM", t: "gym", x: "Full body A · 50 min · maintenance load" },
+      { h: "8:00 AM", t: "gym", x: "Day 2 · back, chest, core · 50 min · maintenance load" },
       { h: "5:00 PM", t: "swim", x: "Threshold · 6 × 400 m at 1:32/100 m" } ] },
     { d: "Tue", label: "Run threshold with the team", ses: [
       { h: "6:30 AM", t: "brick", x: "Bike 90 min at 30 km/h into 15 min easy off the bike" },
       { h: "5:00 PM", t: "run", x: "Threshold · 6 × 1 km at 4:25/km · 90 s jog" } ] },
     { d: "Wed", label: "Easy day", ses: [
       { h: "6:30 AM", t: "run", x: "Run 12 km easy · zone 1 to 2" },
-      { h: "8:00 AM", t: "gym", x: "Full body B · 50 min" },
+      { h: "8:00 AM", t: "gym", x: "Day 3 · shoulders, arms, core · 50 min" },
       { h: "5:00 PM", t: "swim", x: "Swim 3.2 km · zone 2 plus 8 × 100 m at 1:32/100 m" } ] },
     { d: "Thu", label: "Bike specific", ses: [
       { h: "2:00 PM", t: "bike", x: "Bike 65 min · race pace blocks at 32 km/h" },
       { h: "Rest of day", t: "mob", x: "Nothing else" } ] },
     { d: "Fri", label: "Easy day", ses: [
       { h: "6:30 AM", t: "run", x: "Run 10 km easy · zone 1" },
-      { h: "8:00 AM", t: "gym", x: "Full body C · 50 min" },
+      { h: "8:00 AM", t: "gym", x: "Day 1 · legs · 50 min" },
       { h: "5:00 PM", t: "swim", x: "Swim 3 km · open water technique and sighting · daylight permitting" } ] },
     { d: "Sat", label: "Race brick", ses: [
       { h: "8:00 AM", t: "brick", x: "Bike 3:30 at 30 to 32 km/h into 10 km at 4:30/km · full race nutrition" } ] },
@@ -345,41 +345,37 @@ const OTHER_WEEKS = {
 
 // ── Gym ──────────────────────────────────────────────────────────────────────
 const GYM = {
-  A: { id: "A", name: "Full body A", day: "Monday", emph: "Pull and posterior chain", col: C.swim,
-    note: "Heaviest session of the week and the one that goes first when you are freshest. Rønnestad and Mujika found four to ten repetitions with two to three minutes of rest is the range that transfers to endurance performance, so the rest periods are not optional padding.",
+  A: { id: "A", name: "Day 1 · Legs", day: "Wednesday", emph: "Maximal force, posterior chain", col: C.run,
+    note: "Wednesday, after the swim. It sits here because heavy legs 24 hours before Tuesday's run threshold would ruin the run, and 24 hours before Saturday's long ride would ruin the ride. Thursday's bike is what this costs, and Thursday's bike is the cheapest session to spend. Ronnestad and Mujika: 4 to 10 repetitions, 2 to 3 sets, 2 to 3 minutes of rest. Drive the bar up as fast as you intend to even when it moves slowly, because intended velocity is what drives the adaptation.",
     ex: [
-      { n: "Hip thrust — barbell", s: "3–4", r: "6–8", rest: "3 min", cue: "Drive through the heel, chin tucked, hard squeeze at the top.", tr: "Glute propulsion — the run driver and the bike push phase" },
-      { n: "Pull-up", s: "3–4", r: "6–8", rest: "3 min", cue: "Elbows to the hip pockets, full hang at the bottom.", tr: "Lat width and the catch phase of the stroke" },
-      { n: "Romanian deadlift", s: "3", r: "8–10", rest: "2.5 min", cue: "Hinge at the hip, bar close, three seconds down.", tr: "Hamstring resilience and run economy" },
-      { n: "Overhead press", s: "3", r: "8–10", rest: "2.5 min", cue: "Brace, press vertical, no lower back arch.", tr: "Shoulder stability through the push phase" },
-      { n: "Lateral raise — dumbbell", s: "3", r: "12–15", rest: "60 s", cue: "Pinky leads, three seconds down, light.", tr: "Deltoid width" },
+      { n: "Back squat", s: "3", r: "5–6", rest: "3 min", cue: "Brace hard, depth to parallel, drive up with intent. Stop one rep short of failure.", tr: "Maximal force in the exact muscles that run and pedal" },
+      { n: "Romanian deadlift", s: "3", r: "6–8", rest: "2.5 min", cue: "Hinge at the hip, bar close to the legs, three seconds down.", tr: "Hamstring resilience and run economy" },
+      { n: "Bulgarian split squat", s: "3", r: "8 each", rest: "2 min", cue: "Rear foot elevated, knee tracks the toe, torso upright.", tr: "Single-leg propulsion, the highest-transfer lift in the plan" },
+      { n: "Nordic hamstring curl", s: "3", r: "5", rest: "2 min", cue: "Lower as slowly as you can control, push back up with your hands.", tr: "The one exercise with direct trial evidence for preventing hamstring strains" },
+      { n: "Single-leg calf raise", s: "3", r: "12 each", rest: "60 s", cue: "Full range, pause at the bottom stretch.", tr: "Achilles stiffness, which is run economy" },
+      { n: "Hanging knee raise", s: "3", r: "10", rest: "60 s", cue: "No swing, curl the pelvis up at the top.", tr: "Trunk stability under fatigue" },
+    ] },
+  B: { id: "B", name: "Day 2 · Back, chest, core", day: "Monday", emph: "Pull emphasis", col: C.swim,
+    note: "Monday, after the morning ride. Upper body only, deliberately, so Tuesday's run threshold is completely untouched. Pulling outweighs pressing because swimming is a pulling sport and you have three swims a week to support.",
+    ex: [
+      { n: "Pull-up, weighted if you can", s: "3", r: "5–6", rest: "3 min", cue: "Full hang at the bottom, elbows down to the hip pockets.", tr: "Lat strength through the catch phase of the stroke" },
+      { n: "Bench press", s: "3", r: "6", rest: "2.5 min", cue: "Blades back and down, control the descent, no bounce.", tr: "Push phase of the stroke" },
+      { n: "Chest-supported row", s: "3", r: "8", rest: "2.5 min", cue: "Chest stays on the pad, row to the low ribs, no body english.", tr: "Mid-back endurance, what holds your position on the aero bars" },
+      { n: "Incline dumbbell press", s: "3", r: "8–10", rest: "2 min", cue: "Thirty to forty-five degrees, full stretch at the bottom.", tr: "Upper chest through the front of the stroke" },
       { n: "Straight-arm pulldown", s: "3", r: "12–15", rest: "75 s", cue: "Arms straight, movement at the shoulder only.", tr: "Mimics the underwater pull almost exactly" },
-      { n: "Single-leg calf raise", s: "3", r: "12–15", rest: "60 s", cue: "Full range, pause at the bottom.", tr: "Achilles stiffness, which is run economy" },
-      { n: "Dead bug", s: "3", r: "8 each", rest: "60 s", cue: "Low back pressed down the whole time.", tr: "Contralateral coordination under fatigue" },
+      { n: "Pallof press", s: "3", r: "10 each", rest: "60 s", cue: "Resist the rotation, do not create it. Ribs down.", tr: "Anti-rotation, what stops the hips swinging late in a run" },
+      { n: "Dead bug", s: "3", r: "8 each", rest: "60 s", cue: "Low back pressed into the floor the entire set.", tr: "Contralateral coordination under fatigue" },
     ] },
-  B: { id: "B", name: "Full body B", day: "Wednesday", emph: "Push and quads", col: C.run,
-    note: "The Bulgarian split squat is the single most transferable lift here and it goes first. On threshold run days this session sits two hours after the intervals, never before them.",
+  C: { id: "C", name: "Day 3 · Shoulders, arms, core", day: "Friday", emph: "Shoulder health and push", col: C.bike,
+    note: "Friday evening, after the easy run and the swim. The lightest of the three and it should stay that way, because Saturday is the biggest session of your week. The face pulls and rear delt work are not padding: three swims a week with a stroke still under construction is exactly the exposure that produces shoulder impingement.",
     ex: [
-      { n: "Bulgarian split squat", s: "3–4", r: "6–8 each", rest: "3 min", cue: "Rear foot elevated, knee tracks the toe, torso upright.", tr: "Single-leg propulsion — the highest transfer exercise in the plan" },
-      { n: "Incline dumbbell press", s: "3", r: "8–10", rest: "2.5 min", cue: "Thirty to forty-five degrees, blades back, control the descent.", tr: "Swim push phase" },
-      { n: "Barbell bent-over row", s: "3", r: "8–10", rest: "2.5 min", cue: "Hinge to forty-five degrees, row to the low ribs.", tr: "Pulling power and postural endurance" },
-      { n: "Lateral raise — cable", s: "3", r: "12–15", rest: "60 s", cue: "Arm slightly forward of the body, controlled throughout.", tr: "Constant tension through the full range" },
-      { n: "Rear delt fly", s: "3", r: "15", rest: "60 s", cue: "Slight elbow bend, lead with the elbows, no shrug.", tr: "Recovery phase of the stroke and shoulder health" },
-      { n: "Leg press", s: "3", r: "10–12", rest: "2 min", cue: "Full depth, no knee lock, control the negative.", tr: "Bike power at cadence" },
-      { n: "Nordic hamstring curl", s: "2", r: "5", rest: "2 min", cue: "Lower as slowly as you can, four to five seconds.", tr: "The best-evidenced hamstring injury reducer there is" },
-      { n: "Pallof press", s: "3", r: "10 each", rest: "60 s", cue: "Press out, hold two seconds, hips square, no rotation.", tr: "Run form when you are tired" },
-    ] },
-  C: { id: "C", name: "Full body C", day: "Friday", emph: "Shoulders and hamstrings", col: C.gym,
-    note: "Lightest of the three, placed before an easy swim rather than a run. Eighteen months of swimming volume makes the rotator cuff work here non-negotiable.",
-    ex: [
-      { n: "Arnold press", s: "3", r: "8–10", rest: "2.5 min", cue: "Start neutral, rotate as you press, controlled.", tr: "All three deltoid heads in one movement" },
-      { n: "Lat pulldown — wide", s: "3", r: "8–10", rest: "2 min", cue: "Chest tall, lead with the elbows, no leaning back.", tr: "Second lat session of the week" },
-      { n: "Lateral raise — dumbbell", s: "4", r: "12–15", rest: "60 s", cue: "Two seconds up, three down, no momentum.", tr: "Third and final deltoid dose of the week" },
-      { n: "Single-arm dumbbell row", s: "3", r: "10 each", rest: "90 s", cue: "Elbow past the hip, full stretch at the bottom.", tr: "Unilateral stroke mechanics" },
-      { n: "Hip thrust — dumbbell", s: "3", r: "10–12", rest: "2 min", cue: "Lighter than Monday, still squeeze at the top.", tr: "Glute endurance late in the run" },
-      { n: "Face pull", s: "3", r: "15", rest: "60 s", cue: "Pull to the forehead, elbows high, pause at the peak.", tr: "Rotator cuff health across eighteen months of swimming" },
-      { n: "Hanging leg raise", s: "3", r: "10–12", rest: "60 s", cue: "Tilt the pelvis back, legs together, no swing.", tr: "Hip flexor strength for knee drive" },
-      { n: "Hammer curl", s: "2", r: "10–12", rest: "75 s", cue: "No swinging, full extension at the bottom.", tr: "Arm endurance" },
+      { n: "Overhead press", s: "3", r: "6", rest: "2.5 min", cue: "Brace, press vertical, no lower back arch.", tr: "Shoulder strength through the recovery phase of the stroke" },
+      { n: "Single-arm dumbbell row", s: "3", r: "8 each", rest: "2 min", cue: "Flat back, row to the hip, full stretch at the bottom.", tr: "Unilateral pull, because the stroke is one arm at a time" },
+      { n: "Dips or close-grip bench", s: "3", r: "8", rest: "2 min", cue: "Elbows tucked, controlled depth, no shrugging at the top.", tr: "Triceps through the finish of the underwater pull" },
+      { n: "Lateral raise", s: "3", r: "12–15", rest: "60 s", cue: "Pinky leads, three seconds down, lighter than your ego wants.", tr: "Deltoid balance around the joint" },
+      { n: "Face pull", s: "3", r: "15", rest: "60 s", cue: "Pull to the forehead, rotate outward at the end, pause there.", tr: "External rotators, the best insurance you have against swimmer's shoulder" },
+      { n: "Dumbbell curl", s: "2", r: "10", rest: "60 s", cue: "No swing, full extension at the bottom.", tr: "Elbow flexor balance, the least important thing here, kept honest at two sets" },
+      { n: "Side plank", s: "3", r: "30–40 s each", rest: "45 s", cue: "Hips stacked and lifted, no sag.", tr: "Lateral trunk stability on the run" },
     ] },
 };
 
@@ -406,17 +402,12 @@ const ready = (async () => {
   try {
     const db = await window.claude?.use?.("db");
     const user = await window.claude?.use?.("user");
-    if (db && user) {
-      const uid = await user.id();
-      if (uid) docRef = db.doc("data/users/" + uid + "/plan");
-    }
+    if (db && user) { const uid = await user.id(); if (uid) docRef = db.doc("data/users/" + uid + "/plan"); }
   } catch (e) {}
 })();
 const load = async () => {
   try { await ready; } catch (e) {}
-  if (docRef) {
-    try { const snap = await docRef.get(); if (snap.exists) return { ...empty, ...snap.data() }; } catch (e) {}
-  }
+  if (docRef) { try { const snap = await docRef.get(); if (snap.exists) return { ...empty, ...snap.data() }; } catch (e) {} }
   try { const raw = localStorage.getItem(KEY); if (raw) return { ...empty, ...JSON.parse(raw) }; } catch (e) {}
   return empty;
 };
