@@ -5,839 +5,591 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Plan">
-<meta name="theme-color" content="#070B10">
-<title>Triathlon plan</title>
+<meta name="apple-mobile-web-app-title" content="Asunción">
+<meta name="theme-color" content="#07090C">
+<title>Asunción 70.3</title>
 <style>
-  :root {
-    color-scheme: dark;
-    box-sizing: border-box;
-    padding-top: env(safe-area-inset-top, 0px);
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+  :root{
+    color-scheme:dark;
+    --bg:#07090C; --surface:#0C1017; --border:#141C24; --dim:#111922;
+    --text:#C8D8E8; --muted:#5A7080; --faint:#3A4A58;
+    --swim:#12A08A; --bike:#C07800; --run:#2E86D6; --gym:#8B5CF6;
+    --brick:#C8A030; --test:#C85A3A; --ok:#3FA86B;
   }
-  *, *::before, *::after { box-sizing: inherit; }
-  html { scroll-padding-top: env(safe-area-inset-top, 0px); -webkit-text-size-adjust: 100%; }
-  body {
-    margin: 0;
-    background: #070B10;
-    color: #E6EDF3;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    overflow-x: hidden;
-  }
-  img, table { max-width: 100%; }
-  #boot { padding: 48px 20px; text-align: center; color: #7D8B99; font-size: 13px; }
+  *,*::before,*::after{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:calc(env(safe-area-inset-bottom,0px) + 40px);
+    overflow-x:hidden;-webkit-tap-highlight-color:transparent;line-height:1.5;}
+  .wrap{max-width:760px;margin:0 auto;padding:0 16px;}
+
+  header{padding:16px 0 10px;}
+  .race{font-size:16px;font-weight:800;letter-spacing:-.01em;}
+  .sub{font-size:11.5px;color:var(--muted);margin-top:4px;}
+  .sub b{color:var(--brick);font-weight:700;}
+
+  nav{display:flex;overflow-x:auto;gap:2px;border-bottom:1px solid var(--border);
+    position:sticky;top:0;background:var(--bg);z-index:10;margin-bottom:13px;scrollbar-width:none;}
+  nav::-webkit-scrollbar{display:none;}
+  nav button{flex:0 0 auto;padding:12px 13px;font-size:12px;font-weight:600;background:none;
+    border:none;border-bottom:2px solid transparent;color:var(--muted);cursor:pointer;
+    font-family:inherit;white-space:nowrap;}
+  nav button.on{color:#6BB8E8;border-bottom-color:#6BB8E8;}
+
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;
+    padding:14px;margin-bottom:10px;}
+  .eyebrow{font-size:9.5px;font-weight:700;letter-spacing:.13em;color:var(--muted);
+    margin-bottom:9px;text-transform:uppercase;}
+  h3{margin:0 0 7px;font-size:13.5px;font-weight:700;}
+  p{margin:0 0 9px;font-size:12.5px;color:#9FB3C4;}
+  p:last-child{margin-bottom:0;}
+  p b{color:var(--text);font-weight:600;}
+  .note{font-size:11.5px;color:#8498A8;line-height:1.65;}
+
+  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;}
+  table{width:100%;border-collapse:collapse;font-size:11.5px;}
+  th{text-align:left;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--muted);font-weight:700;padding:0 8px 7px 0;border-bottom:1px solid var(--border);
+    white-space:nowrap;}
+  td{padding:8px 8px 8px 0;border-bottom:1px solid var(--dim);font-variant-numeric:tabular-nums;
+    white-space:nowrap;}
+  tr:last-child td{border-bottom:none;}
+  td.r,th.r{text-align:right;padding-right:0;}
+  .big{font-weight:700;color:var(--text);}
+  tr.dl td{color:#6E8294;} tr.ts td{color:#C89A80;}
+
+  .wsel{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px;scrollbar-width:none;}
+  .wsel::-webkit-scrollbar{display:none;}
+  .wsel button{flex:0 0 auto;min-width:54px;padding:9px 6px;border-radius:9px;
+    background:var(--dim);border:1px solid var(--border);color:var(--muted);
+    font-family:inherit;cursor:pointer;text-align:center;}
+  .wsel button .wn{font-size:13px;font-weight:700;display:block;}
+  .wsel button .wt{font-size:8.5px;letter-spacing:.05em;text-transform:uppercase;margin-top:2px;display:block;}
+  .wsel button.on{background:#17222D;border-color:#2E4A60;color:var(--text);}
+
+  .day{background:var(--surface);border:1px solid var(--border);border-radius:12px;
+    padding:12px 13px;margin-bottom:8px;}
+  .dhead{display:flex;align-items:baseline;gap:9px;margin-bottom:8px;}
+  .dname{font-size:12.5px;font-weight:700;}
+  .dlabel{font-size:10.5px;color:var(--muted);}
+  .ses{display:flex;gap:9px;padding:8px 0;align-items:flex-start;}
+  .ses + .ses{border-top:1px solid var(--dim);}
+  .hh{font-size:9.5px;font-weight:700;color:var(--faint);min-width:50px;flex-shrink:0;padding-top:3px;}
+  .pill{font-size:8.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    padding:3px 6px;border-radius:5px;flex-shrink:0;margin-top:1px;color:#07090C;}
+  .sbody{flex:1;min-width:0;}
+  .stitle{font-size:12px;font-weight:600;line-height:1.45;}
+  .starg{font-size:11px;margin-top:4px;font-variant-numeric:tabular-nums;}
+  .starg span{display:inline-block;margin-right:12px;}
+  .starg .lab{color:var(--faint);font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;}
+  .scue{font-size:10.5px;color:var(--muted);margin-top:4px;line-height:1.5;}
+
+  .ex{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--dim);align-items:baseline;}
+  .ex:last-child{border-bottom:none;}
+  .exn{font-size:12px;font-weight:600;}
+  .exs{font-size:11px;color:var(--brick);font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .exc{font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.5;}
+
+  .kv{display:flex;justify-content:space-between;gap:12px;padding:7px 0;
+    border-bottom:1px solid var(--dim);font-size:12px;}
+  .kv:last-child{border-bottom:none;}
+  .kv .k{color:var(--muted);}
+  .kv .v{font-weight:600;font-variant-numeric:tabular-nums;text-align:right;}
+
+  .hide{display:none;}
+  .flag{border-left:2px solid var(--test);padding-left:10px;}
+  .win{border-left:2px solid var(--ok);padding-left:10px;}
+  .chk{border-left:2px solid var(--brick);padding-left:10px;}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js" crossorigin></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js" crossorigin></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.4/babel.min.js" crossorigin></script>
 </head>
 <body>
-<div id="root"><div id="boot">Loading your plan…</div></div>
-<script type="text/babel" data-presets="react">
-const { useState, useEffect } = React;
+<div class="wrap">
+  <header>
+    <div class="race">Ironman 70.3 Asunción</div>
+    <div class="sub">Sunday 11 July 2027 · flat course, river swim · <b id="cd"></b></div>
+  </header>
 
+  <nav>
+    <button data-t="week" class="on">Week</button>
+    <button data-t="prog">Progression</button>
+    <button data-t="phase">Phase 1</button>
+    <button data-t="target">Targets</button>
+    <button data-t="gym">Gym</button>
+    <button data-t="method">Method</button>
+  </nav>
 
+  <section id="week"></section>
+  <section id="prog" class="hide"></section>
+  <section id="phase" class="hide"></section>
+  <section id="target" class="hide"></section>
+  <section id="gym" class="hide"></section>
+  <section id="method" class="hide"></section>
+</div>
 
-// ── Palette ──────────────────────────────────────────────────────────────────
-const C = {
-  bg: "#07090C", surface: "#0C1017", border: "#141C24",
-  text: "#C8D8E8", muted: "#5A7080", dim: "#121A22",
-  swim: "#12A08A", run: "#2E86D6", bike: "#C07800",
-  gym: "#9048D0", brick: "#D05A10", rest: "#42545E",
-  race: "#C8A030", ok: "#2FA86A", warn: "#C85A3A",
-  p1: "#1290B4", p2: "#1E9A74", p3: "#A89400",
-  p4: "#C03A3A", p5: "#7A52C0", p6: "#4E8A4E",
-};
+<script>
+(function () {
+  "use strict";
 
-const TAG = (t) => ({
-  swim: ["Swim", C.swim], run: ["Run", C.run], bike: ["Bike", C.bike],
-  gym: ["Gym", C.gym], cali: ["Home", C.gym], brick: ["Brick", C.brick], rest: ["Rest", C.rest],
-  race: ["Test", C.race], mob: ["Mobility", C.muted],
-}[t] || [t, C.muted]);
+  var COL = { swim:"var(--swim)", bike:"var(--bike)", run:"var(--run)", gym:"var(--gym)",
+              brick:"var(--brick)", test:"var(--test)", mob:"var(--muted)" };
 
-// ── Athlete ──────────────────────────────────────────────────────────────────
-const ATHLETE = {
-  weight: 70, height: 177, age: 18, rhr: "57–60", hrMax: 200,
-  z2: { run: "5:15/km", bike: "26 km/h", swim: "1:50/100 m", hr: "150–165 bpm · zone 1 sits under 150" },
-  golden: { hr: "170–182 bpm", lactate: "2.3–3.0 mmol/L", run: "4:35–4:45/km", swim: "1:44/100 m", bike: "215 W race, ~275 W threshold" },
-  prs: [
-    ["5 km", "21:14", "4:14/km — the number everything is built from"],
-    ["10 km", "48:00", "your 5 km predicts 44:16"],
-    ["Half marathon", "1:51", "your 5 km predicts 1:37:40"],
-    ["Swim 2 km", "1:52/100 m", "strong base, and swimming carries no injury cost"],
-    ["Bike", "untested", "indoor only until you have a road bike"],
-  ],
-};
+  function mmss(s){ return Math.floor(s/60) + ":" + String(Math.round(s%60)).padStart(2,"0"); }
+  function hm(m){ return m >= 90 ? Math.floor(m/60) + ":" + String(m%60).padStart(2,"0") : m + " min"; }
+  function r1(x){ return (Math.round(x*10)/10).toFixed(1); }
 
-// ── Phase 1 — all thirteen weeks ─────────────────────────────────────────────
-// Volume rises 3% per load week, drops to 65% in the deload, and the next block
-// restarts at the previous block's final load week rather than above it.
-const P1 = [
-  { n: 1,  block: "Block 1", type: "load",   swim: 8.5,  bike: 240, sat: 165, run: 38, long: 11.0, hrs: "10:10", gym: "2 × 60 min", thr: [], out: true,
-    note: "Technique and structure only, and the bike is outdoors from day one. Saturday opens at 2:45 and never drops below it again, with one easy ride on Monday morning. No threshold work in any discipline. Rønnestad and Mujika are explicit that the first weeks of a strength programme should sit alongside low-intensity endurance, and long zone 2 riding is exactly that: high aerobic load at almost no impact cost." },
-  { n: 2,  block: "Block 1", type: "load",   swim: 8.8,  bike: 255, sat: 175, run: 39, long: 11.5, hrs: "10:36", gym: "2 × 60 min", thr: [], out: true,
-    note: "Same shape, five more minutes on Saturday. Your legs will feel heavy from the gym this week and that is expected, not a warning sign. Hold the easy paces and the sub-150 heart rate even if they feel harder than last week." },
-  { n: 3,  block: "Block 1", type: "load",   swim: 9.0,  bike: 270, sat: 185, run: 40, long: 12.0, hrs: "11:00", gym: "2 × 60 min", thr: ["swim"], out: true,
-    note: "Swim threshold enters first, because swimming is the only discipline where threshold work carries essentially no injury cost. Monday afternoon with the team becomes 8 × 200 m at 1:44/100 m with 30 seconds rest. Saturday reaches 2:45, and carbohydrate from minute 30 is now standing procedure on every long ride." },
-  { n: 4,  block: "Block 1", type: "deload", swim: 5.9,  bike: 175, sat: 120, run: 26, long: 8.0,  hrs: "7:15",  gym: "2 × 45 min", thr: [], out: true,
-    note: "Volume to 65%. Gym drops to two working sets per exercise at the same load. Use this week to get the bike fitted and set up, so week 5 starts on a bike that already fits you rather than one you are still adjusting." },
-  { n: 5,  block: "Block 2", type: "load",   swim: 9.0,  bike: 270, sat: 185, run: 40, long: 12.0, hrs: "11:00", gym: "2 × 60 min", thr: ["swim"], out: true,
-    note: "Last week before the trainer changes the shape of the week. Saturday repeats week 3 at 3:05 rather than climbing, because week 6 adds both a midweek ride and bike threshold at once and you want to arrive at that fresh. Everything is still zone 2, heart rate 150 to 165, speed is not a target of any kind." },
-  { n: 6,  block: "Block 2", type: "load",   swim: 9.3,  bike: 355, sat: 200, run: 41, long: 12.5, hrs: "12:36", gym: "2 × 60 min", thr: ["swim", "bike"], out: true,
-    note: "The trainer arrives and the week changes shape. Saturday reaches 3:20 and grows by roughly 15 minutes a week from here to 4:30 in week 11. Bike threshold enters on Wednesday evening and stays indoors permanently: 3 × 8 minutes at 170–182 bpm with 3 minutes easy between. Controlling a thirteen-beat band on Navarran roads in November is not realistic, and the band is the whole point." },
-  { n: 7,  block: "Block 2", type: "load",   swim: 9.6,  bike: 380, sat: 215, run: 43, long: 13.0, hrs: "13:17", gym: "2 × 60 min", thr: ["swim", "bike"], out: true,
-    note: "3:15 on Saturday, and this is the ride where fuelling stops being a detail: 60 to 80 g of carbohydrate per hour, taken on the move, starting at minute 30 and never skipped. You are training the gut as deliberately as the legs, and the gut takes longer." },
-  { n: 8,  block: "Block 2", type: "deload", swim: 6.2,  bike: 250, sat: 140, run: 28, long: 9.0,  hrs: "8:46",  gym: "2 × 45 min", thr: ["swim"], out: true,
-    note: "Keep one short swim threshold set, cut everything else, Saturday back to two hours. Bakken's principle for reduced weeks is to preserve the threshold habit while stripping the volume, so the stimulus stays familiar." },
-  { n: 9,  block: "Block 3", type: "load",   swim: 9.6,  bike: 400, sat: 230, run: 43, long: 13.0, hrs: "13:37", gym: "2 × 60 min", thr: ["swim", "bike", "run"], out: true,
-    note: "Run threshold enters, eight weeks later than swimming, and it lands on the Tuesday team run: 6 × 1000 m at 4:40/km with 75 seconds jog. Until this week that Tuesday session stays easy no matter what the group does. Short reps keep lactate under 3 mmol even at a pace faster than half marathon pace. Saturday reaches 3:30." },
-  { n: 10, block: "Block 3", type: "load",   swim: 9.9,  bike: 430, sat: 250, run: 44, long: 13.5, hrs: "14:18", gym: "2 × 60 min", thr: ["swim", "bike", "run"], out: true,
-    note: "Four hours on Saturday, and three threshold sessions now sit across three disciplines, which is exactly how the Norwegian triathlon group structures it — never two in the same discipline on the same day. The long ride is already longer than your race bike leg will be, which is what a base phase is for." },
-  { n: 11, block: "Block 3", type: "load",   swim: 10.2, bike: 455, sat: 270, run: 45, long: 13.5, hrs: "14:53", gym: "2 × 60 min", thr: ["swim", "bike", "run"], out: true,
-    note: "Peak week of the phase and the longest ride in it: 4:30. Run threshold goes to 8 × 1000 m. Take Saturday onto a route with a real climb and treat holding zone 2 up it as the session's actual objective, not an inconvenience." },
-  { n: 12, block: "Block 3", type: "deload", swim: 6.6,  bike: 300, sat: 175, run: 29, long: 9.0,  hrs: "9:48",  gym: "2 × 45 min", thr: ["swim"], out: true,
-    note: "Final deload before testing, Saturday back to its 2:30 floor. Sleep is the session this week." },
-  { n: 13, block: "Test",    type: "test",   swim: 8.0,  bike: 280, sat: 165, run: 36, long: 12.0, hrs: "10:31", gym: "2 × 45 min", thr: [], out: true,
-    note: "Test week. Tuesday 1,000 m swim time trial, Thursday 40-minute maximum distance on the trainer, Sunday 10 km time trial replacing the long run. Saturday stays easy at 2:30. These three numbers set every pace in phase 2, so treat them as races." },
-];
+  // ── week-by-week progressions ──────────────────────────────────────────
+  // Paces are PREDICTIONS at a fixed heart rate, not instructions.
+  var FTP0 = 250;                                   // provisional until the week-3 test
+  function ftp(n){ return Math.round(FTP0 + (n-3)*2.8); }
+  function easyRun(n){ return mmss(318 - (n-3)*2.0); }   // 5:18 → 5:00
+  function longRun(n){ return mmss(328 - (n-3)*2.0); }   // 5:28 → 5:10
+  function swimAer(n){ return mmss(135 - (n-3)*1.45); }  // 2:15 → 2:02
+  var RUN_THR  = { 8:"4:25", 10:"4:22", 11:"4:20" };
+  var SWIM_THR = { 5:"2:00", 6:"2:00", 7:"1:59", 8:"1:58", 9:"1:58", 10:"1:56", 11:"1:55" };
+  var SWIM_SET = { 5:"8 × 100 m · 20 s rest", 6:"6 × 100 m · 20 s rest",
+                   7:"6 × 200 m · 25 s rest", 8:"5 × 300 m · 30 s rest",
+                   9:"6 × 100 m · 20 s rest", 10:"6 × 200 m · 25 s rest",
+                   11:"5 × 400 m · 40 s rest" };
+  var BIKE_SET = { 7:"3 × 8 min · 3 min easy", 8:"4 × 8 min · 3 min easy",
+                   9:"2 × 8 min · 3 min easy", 10:"3 × 10 min · 3 min easy",
+                   11:"4 × 10 min · 3 min easy" };
+  var RUN_SET  = { 8:"5 × 1000 m · 90 s jog", 10:"5 × 1000 m · 90 s jog", 11:"6 × 1000 m · 90 s jog" };
 
-// Swim shares are fixed. Bike is split by taking the Saturday ride out first,
-// then dividing the remainder across the three midweek trainer sessions, so the
-// long ride can grow at its own rate without disturbing the weekly total.
-const SWIM_SHARE = { mon: 0.38, wed: 0.34, fri: 0.28 };
-const SWIM_FACTOR = 1.0; // three longer self-directed swims carry the full volume
+  function easyW(n){ var f=ftp(n); return Math.round(f*0.60/5)*5 + "–" + Math.round(f*0.68/5)*5 + " W"; }
+  function thrW(n){ var f=ftp(n); return Math.round(f*0.95/5)*5 + "–" + f + " W"; }
 
-const mmss = (sec) => `${Math.floor(sec / 60)}:${String(Math.round(sec % 60)).padStart(2, "0")}`;
-// Easy pace is not prescribed, it is predicted: hold the heart rate band and
-// this is roughly where the pace should land as aerobic fitness improves.
-const easyRun = (n) => mmss(315 - (n - 1) * 1.5);
-const easySwim = (n) => mmss(110 - (n - 1) * 0.6);
-const easyBikeKmh = (n) => (26 + (n - 1) * 0.22).toFixed(1);
-const r1 = (x) => Math.round(x * 10) / 10;
-const rm = (x) => Math.round(x / 5) * 5;
-const hm = (m) => (m >= 90 ? `${Math.floor(m / 60)}:${String(m % 60).padStart(2, "0")}` : `${m} min`);
-
-function buildWeek(w) {
-  const s = SWIM_SHARE;
-  const rest = w.bike - w.sat;
-  const trainer = w.n >= 6;
-  const bMon = rm(rest * 0.52);
-  const bWed = rm(rest * 0.48);
-  const sw = w.swim * SWIM_FACTOR;
-  const hasS = w.thr.includes("swim"), hasB = w.thr.includes("bike"), hasR = w.thr.includes("run");
-  const test = w.type === "test";
-  const out = w.out;
-  const gymLen = w.type === "load" ? "60 min" : "45 min";
-  const setNote = w.type === "load" ? "3 working sets" : "2 working sets, same load";
-
-  const runTue = r1(w.run * 0.26), runWed = r1(w.run * 0.19);
-  const runFri = r1(w.run * 0.21), runBrick = r1(w.run * 0.05);
-
-  const easyBike = `zone 2 · about ${easyBikeKmh(w.n)} km/h · 150 to 165 bpm`;
-
-  const swimThr = hasS
-    ? (w.type === "deload" ? "5 × 200 m at 1:44/100 m · 30 s rest" : w.n >= 9 ? "10 × 200 m at 1:44/100 m · 30 s rest" : "8 × 200 m at 1:44/100 m · 30 s rest")
-    : null;
-  const bikeThr = hasB ? (w.n >= 9 ? "4 × 8 min at 170–182 bpm · 3 min easy" : "3 × 8 min at 170–182 bpm · 3 min easy") : null;
-  const runThr = hasR ? (w.n >= 11 ? "8 × 1000 m at 4:40/km · 75 s jog" : "6 × 1000 m at 4:40/km · 75 s jog") : null;
-
-  const fuel = " · 60 to 80 g of carbohydrate per hour from minute 30";
-  const satText = `Outdoors · ${hm(w.sat)} · zone 2, heart rate 150 to 165 · ignore speed entirely${fuel}`;
-
-  return [
-    { d: "Mon", label: "Bike and strength", ses: [
-      { h: "8:30 AM", t: "bike", x: `Bike ${bMon} min · ${easyBike} · your light class day, so this one goes outdoors as long as it is light` },
-      { h: "11:00 AM", t: "gym",  x: `Day 2 · back, chest, core · ${gymLen} · upper body only, so Tuesday's run threshold stays untouched` },
-    ] },
-    { d: "Tue", label: hasR ? "Run threshold and swim" : "Aerobic", ses: [
-      { h: "6:45 AM", t: "run",  x: runThr
-          ? `Threshold · ${runThr} · 170–182 bpm · total ${runTue} km with warm-up`
-          : `Run ${runTue} km easy · about ${easyRun(w.n)}/km at 150 to 160 bpm · hold the heart rate, let the pace come to you` },
-      { h: "8:30 AM", t: "swim", x: swimThr
-          ? `Threshold · ${swimThr} · plus warm-up and cool-down to ${r1(sw * s.mon)} km`
-          : `Swim ${r1(sw * s.mon)} km · zone 2 at about ${easySwim(w.n)}/100 m · 30% technique drills` },
-    ] },
-    { d: "Wed", label: "Swim and legs", ses: [
-      { h: "7:00 PM", t: "swim", x: `Swim ${r1(sw * s.wed)} km · zone 2 at about ${easySwim(w.n)}/100 m · continuous aerobic` },
-      { h: "After", t: "gym", x: `Day 1 · legs · ${gymLen} · the only heavy leg session of the week` },
-    ] },
-    { d: "Thu", label: hasB ? "Bike threshold" : "Bike aerobic", ses: [
-      { h: "7:00 PM", t: "bike", x: test
-          ? `Test · 40 min maximum distance on the trainer after 15 min warm-up`
-          : bikeThr
-            ? `Threshold on the trainer · ${bikeThr} · total ${bWed} min · power first, heart rate second`
-            : trainer
-              ? `Bike ${bWed} min on the trainer · ${easyBike}`
-              : `Bike ${bWed} min · ${easyBike} · daylight permitting, otherwise this one waits for the trainer` },
-    ] },
-    { d: "Fri", label: "Run, swim, strength", ses: [
-      { h: "6:45 AM", t: "run",  x: `Run ${runFri} km easy · about ${easyRun(w.n)}/km at 150 to 160 bpm · short by design` },
-      { h: "8:15 AM", t: "swim", x: test
-          ? `Time trial · 1,000 m maximum effort · full warm-up first`
-          : `Swim ${r1(sw * s.fri)} km · technique only, no set` },
-      { h: "Evening", t: "gym",  x: `Day 3 · shoulders, arms, core · ${gymLen} · the lightest of the three, Saturday is tomorrow` },
-    ] },
-    { d: "Sat", label: out ? "Long ride outdoors and brick" : "Long ride and brick", ses: [
-      { h: "9:00 AM", t: "bike", x: satText },
-      { h: "Off the bike", t: "brick", x: `Straight off the bike · ${runBrick} km run · zone 2, not fast` },
-    ] },
-    { d: "Sun", label: test ? "10 km time trial" : "Long run", ses: [
-      { h: "9:00 AM", t: test ? "race" : "run", x: test
-          ? `Time trial · 10 km maximum effort · this sets every pace in phase 2`
-          : `Long run ${w.long} km · 150 to 165 bpm · ${Math.round(w.long / w.run * 100)}% of the week's running` },
-      { h: "After", t: "mob", x: `Mobility 20 min · Sunday review afterwards` },
-    ] },
+  // ── weeks 3–12 ─────────────────────────────────────────────────────────
+  var WEEKS = [
+    { n:3, type:"load", dates:"9 – 15 Nov", swim:7.5, bike:[55,55,120], run:[12,8,8,3], gym:50, gymN:3, hrs:"11:34",
+      note:"Baseline week, and the one job that matters is the FTP test on Thursday. Every watt in this plan is a guess until that number exists. Swims are technique-dominant from today — nobody has ever looked at your stroke, and that is the largest block of free time on the table. Film yourself this week, side-on and front-on, 25 m of normal swimming." },
+    { n:4, type:"load", dates:"16 – 22 Nov", swim:8.0, bike:[60,60,135], run:[12,9,9,3], gym:55, gymN:3, hrs:"12:34",
+      note:"Zones are real now. Every easy session sits at 150 to 160 bpm and you ignore pace entirely. On the bike, start holding the aero position in blocks of 10 minutes even on the trainer — position is a trainable skill and it takes months." },
+    { n:5, type:"load", dates:"23 – 29 Nov", swim:8.5, bike:[65,65,150], run:[13,9,9,4], gym:55, gymN:3, hrs:"13:20",
+      note:"Swim threshold enters first, because swimming is the only discipline where hard work carries no impact cost. Nothing else changes this week." },
+    { n:6, type:"deload", dates:"30 Nov – 6 Dec", swim:5.5, bike:[45,45,90], run:[9,6,7,2], gym:40, gymN:3, hrs:"8:57",
+      note:"Volume to 65%, gym to two working sets at the same load. Keep one short swim threshold set — Bakken's rule for reduced weeks is to strip volume, not the stimulus. First checkpoint: easy running should be around 5:12/km at 155 bpm." },
+    { n:7, type:"load", dates:"7 – 13 Dec", swim:9.0, bike:[70,70,165], run:[13,9,10,4], gym:55, gymN:3, hrs:"14:00",
+      note:"Bike threshold enters on Thursday and lives on the trainer permanently. Controlling a thirteen-beat band on Navarran roads in December is not realistic, and the band is the entire mechanism." },
+    { n:8, type:"load", dates:"14 – 20 Dec", swim:9.5, bike:[70,75,185], run:[14,10,10,4], gym:55, gymN:3, hrs:"14:46",
+      note:"Run threshold enters, as short repetitions rather than continuous tempo. Short reps keep lactate under 3 mmol at a pace faster than half-marathon pace. This is earlier than ideal — see the compressed-calendar note in Method." },
+    { n:9, type:"deload", dates:"21 – 27 Dec", swim:6.0, bike:[50,45,100], run:[10,6,7,3], gym:40, gymN:3, hrs:"9:32",
+      note:"Christmas, deliberately placed so the week you control least asks least of you. Keep the swim threshold, drop the run threshold entirely, and do not try to make this week up afterwards. Checkpoint: easy running around 5:06/km at 155 bpm." },
+    { n:10, type:"load", dates:"28 Dec – 3 Jan", swim:8.0, bike:[60,60,140], run:[12,9,9,3], gym:50, gymN:2, hrs:"11:34",
+      note:"Travel-flexible. Two gym sessions instead of three, and if the long ride ends up on a trainer in someone's garage, that is fine." },
+    { n:11, type:"load", dates:"4 – 10 Jan", swim:10.0, bike:[75,80,220], run:[14,9,11,4], gym:55, gymN:3, hrs:"15:41",
+      note:"Peak week and the first time you touch 15 to 16 hours. Saturday is 3:40. Three threshold sessions now sit across three disciplines — never two in one discipline on the same day, which is exactly how the Norwegian triathlon group structures it." },
+    { n:12, type:"test", dates:"11 – 17 Jan", swim:7.0, bike:[60,75,120], run:[11,6,12,0], gym:45, gymN:2, hrs:"10:38",
+      note:"Test week. Three numbers set every pace, power and heart rate in phase 2, so treat them as races rather than sessions. Targets: 1,000 m in 19:10, FTP 275 W, 10 km in 40:30." },
   ];
-}
 
-// ── Phases ───────────────────────────────────────────────────────────────────
-const PHASES = [
-  { id: 1, name: "Aerobic base", dates: "1 Oct 2026 – 8 Jan 2027", weeks: 14, col: C.p1, gym: 2,
-    swimTarget: "1:44/100 m", runTarget: "5:05/km", bikeTarget: "27 km/h",
-    focus: "Build the structure that everything else sits on, and build it mostly on the bike, where volume is cheapest. Weekly riding goes from five hours to over seven. Threshold enters one discipline at a time, in order of injury cost: swim in week 3, bike in week 5, run in week 9. Every easy session stays under 155 bpm.",
-    key: "Saturday long ride building from 2:30 to 4:30 with a short brick run off it, and a Sunday long run capped at 30% of weekly running." },
-  { id: 2, name: "Threshold build", dates: "9 Jan – 11 Apr 2027", weeks: 13, col: C.p2, gym: 2,
-    swimTarget: "1:38/100 m", runTarget: "4:52/km", bikeTarget: "29 km/h",
-    focus: "Double threshold days arrive on Tuesday and Thursday, always one session per discipline and never two in the same one. This is the Norwegian structure applied properly to three sports.",
-    key: "Monday swim threshold, Tuesday run threshold, Thursday bike threshold — one discipline each, never doubled up." },
-  { id: 3, name: "Race specificity", dates: "12 Apr – 11 Jul 2027", weeks: 13, col: C.p3, gym: 2,
-    swimTarget: "1:32/100 m", runTarget: "4:38/km", bikeTarget: "32 km/h",
-    focus: "Road bike required from here. Bricks three times a week. Gym drops to maintenance volume so the rising triathlon load has somewhere to go.",
-    key: "Saturday race brick: 3.5 hours at 30 to 32 km/h into a 10 km run at 4:30/km." },
-  { id: 4, name: "Peak volume", dates: "12 Jul – 10 Oct 2027", weeks: 13, col: C.p4, gym: 2,
-    swimTarget: "1:25/100 m", runTarget: "4:24/km", bikeTarget: "34 km/h",
-    focus: "Highest load of the whole build. Gym is one heavy session a week, which the evidence says is enough to hold what you built. Full 70.3 simulation in July.",
-    key: "July: 1.9 km swim, 90 km bike, 21 km run at race effort, with race nutrition rehearsed exactly." },
-  { id: 5, name: "Race simulation", dates: "11 Oct 2027 – 16 Jan 2028", weeks: 14, col: C.p5, gym: 1,
-    swimTarget: "1:45/100 m race", runTarget: "4:18/km", bikeTarget: "35 km/h",
-    focus: "Volume comes down, specificity goes up, and this is the winter block — the bike lives on the trainer, which is fine because it is all race-pace work. A half ironman rehearsal in autumn 2027 means race day is not your first one.",
-    key: "Saturday: 2.5 hours at 35 km/h into 13 km at 4:20/km off the bike." },
-  { id: 6, name: "Taper and race", dates: "17 Jan – 30 Apr 2028", weeks: 17, col: C.p6, gym: 1,
-    swimTarget: "1:20/100 m", runTarget: "4:16/km", bikeTarget: "36 km/h",
-    focus: "Volume falls 40% a week for three weeks while intensity holds. Two light gym sessions continue until ten days out, then stop. Race week runs the gut and sleep protocol.",
-    key: "Race day, late April 2028: swim 33 min at 1:45/100 m, bike 2:32 at 36 km/h on about 215 W, run 1:35 at 4:30/km. Target 4:45." },
-];
+  // ── session builder ────────────────────────────────────────────────────
+  function buildWeek(w){
+    var n = w.n, test = w.type === "test", dl = w.type === "deload";
+    var sets = (dl || test) ? "2 working sets" : "3 working sets";
+    var sw = w.swim, s1 = r1(sw*0.36), s2 = r1(sw*0.36), s3 = r1(sw*0.28);
+    var sThr = SWIM_THR[n], bSet = BIKE_SET[n], rThr = RUN_THR[n];
 
-// One representative load week for phases 2 to 6
-const OTHER_WEEKS = {
-  2: [
-    { d: "Mon", label: "Swim threshold and strength", ses: [
-      { h: "6:30 AM", t: "bike", x: "Bike 70 min · zone 2 · 26 km/h" },
-      { h: "8:00 AM", t: "gym", x: "Day 2 · back, chest, core · 60 min · heavy, 4 to 8 reps" },
-      { h: "5:00 PM", t: "swim", x: "Threshold · 5 × 400 m at 1:38/100 m · 60 s rest" } ] },
-    { d: "Tue", label: "Run threshold with the team", ses: [
-      { h: "6:30 AM", t: "bike", x: "Bike 60 min · zone 2 only · this ride exists to keep Tuesday's run honest" },
-      { h: "5:00 PM", t: "run", x: "Threshold · 5 × 1 km at 4:30/km · 90 s jog · 170–182 bpm" } ] },
-    { d: "Wed", label: "Easy day", ses: [
-      { h: "6:30 AM", t: "run", x: "Run 11 km easy · 5:30/km · under 155 bpm" },
-      { h: "8:00 AM", t: "gym", x: "Day 3 · shoulders, arms, core · 60 min" },
-      { h: "5:00 PM", t: "swim", x: "Swim 3.0 km · zone 2 aerobic" } ] },
-    { d: "Thu", label: "Bike threshold", ses: [
-      { h: "2:00 PM", t: "bike", x: "Threshold · 3 × 12 min at 170–182 bpm" },
-      { h: "Rest of day", t: "mob", x: "Nothing else" } ] },
-    { d: "Fri", label: "Easy day", ses: [
-      { h: "6:30 AM", t: "run", x: "Run 10 km easy · 5:30/km" },
-      { h: "8:00 AM", t: "gym", x: "Day 1 · legs · 60 min" },
-      { h: "5:00 PM", t: "swim", x: "Swim 2.5 km · technique only" } ] },
-    { d: "Sat", label: "Long ride and brick", ses: [
-      { h: "8:00 AM", t: "bike", x: "Bike 4:00 to 4:30 · zone 2 · outdoors · full race fuelling" },
-      { h: "Off the bike", t: "brick", x: "20 min run straight off · zone 2" } ] },
-    { d: "Sun", label: "Long run", ses: [
-      { h: "8:00 AM", t: "run", x: "Long run 15 km · zone 2 · last 3 km at 4:55/km" },
-      { h: "After", t: "mob", x: "Mobility and Sunday review" } ] },
-  ],
-  3: [
-    { d: "Mon", label: "Swim threshold and strength", ses: [
-      { h: "6:30 AM", t: "bike", x: "Bike 60 min · zone 2" },
-      { h: "8:00 AM", t: "gym", x: "Day 2 · back, chest, core · 50 min · maintenance load" },
-      { h: "5:00 PM", t: "swim", x: "Threshold · 6 × 400 m at 1:32/100 m" } ] },
-    { d: "Tue", label: "Run threshold with the team", ses: [
-      { h: "6:30 AM", t: "brick", x: "Bike 90 min at 30 km/h into 15 min easy off the bike" },
-      { h: "5:00 PM", t: "run", x: "Threshold · 6 × 1 km at 4:25/km · 90 s jog" } ] },
-    { d: "Wed", label: "Easy day", ses: [
-      { h: "6:30 AM", t: "run", x: "Run 12 km easy · zone 1 to 2" },
-      { h: "8:00 AM", t: "gym", x: "Day 3 · shoulders, arms, core · 50 min" },
-      { h: "5:00 PM", t: "swim", x: "Swim 3.2 km · zone 2 plus 8 × 100 m at 1:32/100 m" } ] },
-    { d: "Thu", label: "Bike specific", ses: [
-      { h: "2:00 PM", t: "bike", x: "Bike 65 min · race pace blocks at 32 km/h" },
-      { h: "Rest of day", t: "mob", x: "Nothing else" } ] },
-    { d: "Fri", label: "Easy day", ses: [
-      { h: "6:30 AM", t: "run", x: "Run 10 km easy · zone 1" },
-      { h: "8:00 AM", t: "gym", x: "Day 1 · legs · 50 min" },
-      { h: "5:00 PM", t: "swim", x: "Swim 3 km · open water technique and sighting · daylight permitting" } ] },
-    { d: "Sat", label: "Race brick", ses: [
-      { h: "8:00 AM", t: "brick", x: "Bike 3:30 at 30 to 32 km/h into 10 km at 4:30/km · full race nutrition" } ] },
-    { d: "Sun", label: "Long run", ses: [
-      { h: "8:00 AM", t: "run", x: "Long run 18 km · last 5 km at 4:45/km" },
-      { h: "After", t: "mob", x: "Mobility and Sunday review" } ] },
-  ],
-  4: [
-    { d: "Mon", label: "Swim and strength", ses: [
-      { h: "6:30 AM", t: "bike", x: "Bike 60 min · zone 2" },
-      { h: "8:00 AM", t: "gym", x: "Single maintenance session · 45 min · heavy, low volume" },
-      { h: "5:00 PM", t: "swim", x: "Threshold · 8 × 400 m at 1:25/100 m" } ] },
-    { d: "Tue", label: "Run threshold with the team", ses: [
-      { h: "6:30 AM", t: "brick", x: "Bike 2:00 at 32 to 34 km/h into 15 min easy" },
-      { h: "5:00 PM", t: "run", x: "Threshold · 8 × 1 km at 4:20/km · 90 s jog" } ] },
-    { d: "Wed", label: "Easy day", ses: [
-      { h: "6:30 AM", t: "run", x: "Run 13 km easy · zone 1" },
-      { h: "5:00 PM", t: "swim", x: "Swim 4 km · zone 2 plus race pace sets at 1:25/100 m" } ] },
-    { d: "Thu", label: "Bike specific and brick", ses: [
-      { h: "2:00 PM", t: "brick", x: "Bike 75 min threshold blocks at 34 km/h into 20 min at 4:24/km" },
-      { h: "Rest of day", t: "mob", x: "Nothing else" } ] },
-    { d: "Fri", label: "Easy day", ses: [
-      { h: "6:30 AM", t: "run", x: "Run 10 km easy · zone 1" },
-      { h: "5:00 PM", t: "swim", x: "Swim 4.5 km · continuous open water simulation" } ] },
-    { d: "Sat", label: "Long ride", ses: [
-      { h: "8:00 AM", t: "bike", x: "Bike 4:00 to 4:30 at 32 to 34 km/h · practise race fuelling every 25 min" } ] },
-    { d: "Sun", label: "Long run", ses: [
-      { h: "8:00 AM", t: "run", x: "Long run 20 km · last 6 km at 4:24/km · never longer than this" },
-      { h: "After", t: "mob", x: "Mobility and Sunday review" } ] },
-  ],
-  5: [
-    { d: "Mon", label: "Race pace and strength", ses: [
-      { h: "6:30 AM", t: "bike", x: "Bike 55 min · zone 2" },
-      { h: "8:00 AM", t: "gym", x: "Single maintenance session · 45 min" },
-      { h: "5:00 PM", t: "swim", x: "Swim race pace sets at 1:21/100 m · 3.5 km" } ] },
-    { d: "Tue", label: "Run threshold with the team", ses: [
-      { h: "6:30 AM", t: "brick", x: "Bike 2:00 at 34 to 35 km/h into 15 min easy" },
-      { h: "5:00 PM", t: "run", x: "Threshold · 6 × 1.5 km at 4:18/km" } ] },
-    { d: "Wed", label: "Easy day", ses: [
-      { h: "6:30 AM", t: "run", x: "Run 11 km easy · zone 1" },
-      { h: "5:00 PM", t: "swim", x: "Swim 4 km continuous at 1:22/100 m" } ] },
-    { d: "Thu", label: "Race pace bike", ses: [
-      { h: "2:00 PM", t: "brick", x: "Bike 90 min at 35 to 36 km/h into 25 min at 4:20/km" },
-      { h: "Rest of day", t: "mob", x: "Nothing else" } ] },
-    { d: "Fri", label: "Easy day", ses: [
-      { h: "6:30 AM", t: "run", x: "Run 9 km easy · zone 1" },
-      { h: "5:00 PM", t: "swim", x: "Swim open water 3 km · sighting and pack practice" } ] },
-    { d: "Sat", label: "Race simulation brick", ses: [
-      { h: "8:00 AM", t: "brick", x: "Bike 2:30 to 3:00 at 35 km/h into 13 km at 4:20/km · race kit, race nutrition" } ] },
-    { d: "Sun", label: "Long run", ses: [
-      { h: "8:00 AM", t: "run", x: "Long run 18 km at 4:35/km" },
-      { h: "After", t: "mob", x: "Mobility and Sunday review" } ] },
-  ],
-  6: [
-    { d: "Mon", label: "Taper", ses: [
-      { h: "6:30 AM", t: "bike", x: "Bike 40 min easy" },
-      { h: "8:00 AM", t: "gym", x: "Light full body · 40 min · stops ten days before the race" },
-      { h: "5:00 PM", t: "swim", x: "Swim 2.5 km easy plus 4 × 100 m at race pace" } ] },
-    { d: "Tue", label: "Sharpening", ses: [
-      { h: "6:30 AM", t: "bike", x: "Bike 45 min · zone 2 plus 3 × 5 min at race pace" },
-      { h: "5:00 PM", t: "run", x: "Swim 30 min zone 2 plus 4 × 200 m at race pace · leave the group work alone" } ] },
-    { d: "Wed", label: "Feel the water", ses: [
-      { h: "6:30 AM", t: "run", x: "Run 25 min easy" },
-      { h: "5:00 PM", t: "swim", x: "Swim 2 km · easy, no set, just feel" } ] },
-    { d: "Thu", label: "Very light", ses: [
-      { h: "2:00 PM", t: "bike", x: "Bike 30 min easy spin" },
-      { h: "Rest of day", t: "mob", x: "Nothing else" } ] },
-    { d: "Fri", label: "Very light", ses: [
-      { h: "6:30 AM", t: "run", x: "Run 20 min easy plus 3 × 20 s strides" },
-      { h: "5:00 PM", t: "swim", x: "Swim 1.5 km easy" } ] },
-    { d: "Sat", label: "Loosen", ses: [
-      { h: "7:00 AM", t: "swim", x: "Open water 2 km · sighting practice · deliberately early, at race start time" },
-      { h: "11:00 AM", t: "bike", x: "Bike 45 min easy · legs loose" } ] },
-    { d: "Sun", label: "Long run, shortened", ses: [
-      { h: "8:00 AM", t: "run", x: "Run 10 km easy" },
-      { h: "After", t: "mob", x: "Mobility" } ] },
-  ],
-};
+    function S(h,t,title,targets,cue){ return {h:h,t:t,title:title,targets:targets,cue:cue}; }
 
-// ── Gym ──────────────────────────────────────────────────────────────────────
-const GYM = {
-  A: { id: "A", name: "Day 1 · Legs", day: "Wednesday", emph: "Maximal force, posterior chain", col: C.run,
-    note: "Wednesday, after the swim. It sits here because heavy legs 24 hours before Tuesday's run threshold would ruin the run, and 24 hours before Saturday's long ride would ruin the ride. Thursday's bike is what this costs, and Thursday's bike is the cheapest session to spend. Ronnestad and Mujika: 4 to 10 repetitions, 2 to 3 sets, 2 to 3 minutes of rest. Drive the bar up as fast as you intend to even when it moves slowly, because intended velocity is what drives the adaptation.",
-    ex: [
-      { n: "Back squat", s: "3", r: "5–6", rest: "3 min", cue: "Brace hard, depth to parallel, drive up with intent. Stop one rep short of failure.", tr: "Maximal force in the exact muscles that run and pedal" },
-      { n: "Romanian deadlift", s: "3", r: "6–8", rest: "2.5 min", cue: "Hinge at the hip, bar close to the legs, three seconds down.", tr: "Hamstring resilience and run economy" },
-      { n: "Bulgarian split squat", s: "3", r: "8 each", rest: "2 min", cue: "Rear foot elevated, knee tracks the toe, torso upright.", tr: "Single-leg propulsion, the highest-transfer lift in the plan" },
-      { n: "Nordic hamstring curl", s: "3", r: "5", rest: "2 min", cue: "Lower as slowly as you can control, push back up with your hands.", tr: "The one exercise with direct trial evidence for preventing hamstring strains" },
-      { n: "Single-leg calf raise", s: "3", r: "12 each", rest: "60 s", cue: "Full range, pause at the bottom stretch.", tr: "Achilles stiffness, which is run economy" },
-      { n: "Hanging knee raise", s: "3", r: "10", rest: "60 s", cue: "No swing, curl the pelvis up at the top.", tr: "Trunk stability under fatigue" },
-    ] },
-  B: { id: "B", name: "Day 2 · Back, chest, core", day: "Monday", emph: "Pull emphasis", col: C.swim,
-    note: "Monday, after the morning ride. Upper body only, deliberately, so Tuesday's run threshold is completely untouched. Pulling outweighs pressing because swimming is a pulling sport and you have three swims a week to support.",
-    ex: [
-      { n: "Pull-up, weighted if you can", s: "3", r: "5–6", rest: "3 min", cue: "Full hang at the bottom, elbows down to the hip pockets.", tr: "Lat strength through the catch phase of the stroke" },
-      { n: "Bench press", s: "3", r: "6", rest: "2.5 min", cue: "Blades back and down, control the descent, no bounce.", tr: "Push phase of the stroke" },
-      { n: "Chest-supported row", s: "3", r: "8", rest: "2.5 min", cue: "Chest stays on the pad, row to the low ribs, no body english.", tr: "Mid-back endurance, what holds your position on the aero bars" },
-      { n: "Incline dumbbell press", s: "3", r: "8–10", rest: "2 min", cue: "Thirty to forty-five degrees, full stretch at the bottom.", tr: "Upper chest through the front of the stroke" },
-      { n: "Straight-arm pulldown", s: "3", r: "12–15", rest: "75 s", cue: "Arms straight, movement at the shoulder only.", tr: "Mimics the underwater pull almost exactly" },
-      { n: "Pallof press", s: "3", r: "10 each", rest: "60 s", cue: "Resist the rotation, do not create it. Ribs down.", tr: "Anti-rotation, what stops the hips swinging late in a run" },
-      { n: "Dead bug", s: "3", r: "8 each", rest: "60 s", cue: "Low back pressed into the floor the entire set.", tr: "Contralateral coordination under fatigue" },
-    ] },
-  C: { id: "C", name: "Day 3 · Shoulders, arms, core", day: "Friday", emph: "Shoulder health and push", col: C.bike,
-    note: "Friday evening, after the easy run and the swim. The lightest of the three and it should stay that way, because Saturday is the biggest session of your week. The face pulls and rear delt work are not padding: three swims a week with a stroke still under construction is exactly the exposure that produces shoulder impingement.",
-    ex: [
-      { n: "Overhead press", s: "3", r: "6", rest: "2.5 min", cue: "Brace, press vertical, no lower back arch.", tr: "Shoulder strength through the recovery phase of the stroke" },
-      { n: "Single-arm dumbbell row", s: "3", r: "8 each", rest: "2 min", cue: "Flat back, row to the hip, full stretch at the bottom.", tr: "Unilateral pull, because the stroke is one arm at a time" },
-      { n: "Dips or close-grip bench", s: "3", r: "8", rest: "2 min", cue: "Elbows tucked, controlled depth, no shrugging at the top.", tr: "Triceps through the finish of the underwater pull" },
-      { n: "Lateral raise", s: "3", r: "12–15", rest: "60 s", cue: "Pinky leads, three seconds down, lighter than your ego wants.", tr: "Deltoid balance around the joint" },
-      { n: "Face pull", s: "3", r: "15", rest: "60 s", cue: "Pull to the forehead, rotate outward at the end, pause there.", tr: "External rotators, the best insurance you have against swimmer's shoulder" },
-      { n: "Dumbbell curl", s: "2", r: "10", rest: "60 s", cue: "No swing, full extension at the bottom.", tr: "Elbow flexor balance, the least important thing here, kept honest at two sets" },
-      { n: "Side plank", s: "3", r: "30–40 s each", rest: "45 s", cue: "Hips stacked and lifted, no sag.", tr: "Lateral trunk stability on the run" },
-    ] },
-};
+    var mon = [
+      S("7:00 AM","bike","Aerobic ride · " + hm(w.bike[0]),
+        [["Power",easyW(n)],["Heart rate","150–165"]],
+        "Hold the aero position in blocks of 10 min. Cadence 85–95."),
+      S("2:00 PM","gym","Day 2 · back, chest, core · " + w.gym + " min",
+        [["Load","4–10 reps"],["Sets",sets]],
+        "Upper body only, so tomorrow's run is untouched. Never to failure."),
+      S("3:45 PM","swim","Technique swim · " + s1 + " km",
+        [["Pace",swimAer(n) + "/100 m"],["Drills","40%"]],
+        "This is a technique session that happens to be aerobic. Catch and body position, not fitness."),
+    ];
 
-// ── Method ───────────────────────────────────────────────────────────────────
-const METHOD = [
-  { t: "The golden zone is 152 to 165 bpm for you", col: C.p1, b: "Bakken places threshold at 2.0 to 3.0 mmol of lactate, which is roughly 80 to 87 percent of maximum heart rate. With a maximum of 190 that is 152 to 165 bpm. Arild Tveiten, who coaches the Norwegian triathletes, finds their anaerobic threshold lands at 2.5 to 3.0 mmol rather than the 4.0 that most textbooks use. Bakken's instruction is to sit 0.3 to 0.5 mmol below threshold, not at it. Practically: every threshold session should end with you certain you could have done two more repetitions. If you cannot say that, the session was too hard and you have bought fatigue instead of adaptation." },
-  { t: "In triathlon, double threshold means one session per discipline", col: C.p2, b: "This is the single most important correction in the whole plan. Tveiten, describing the Norwegian triathlon group: they do a lot of double threshold, but because they have three disciplines, it is always one session of each. Never two run thresholds in a day, never two swim thresholds. Your swim threshold sits on Monday with the team and your run threshold on Tuesday with the team, on consecutive days rather than the same one. That is fine, and it is fine for the same reason: consecutive quality in two disciplines loads different tissue. Thursday holds the bike threshold, which leaves Wednesday and Friday genuinely easy." },
-  { t: "Threshold enters one discipline at a time", col: C.p3, b: "Swimming carries no impact and almost no injury risk, so swim threshold starts in week 3. Cycling carries no impact either, so bike threshold starts in week 5. Running is where injuries come from, so run threshold waits until week 9, and even then it arrives as short repetitions rather than continuous tempo. Short reps keep lactate below 3 mmol at paces faster than half marathon pace, because the repetition is too short for lactate to climb and the rest is long enough for it to fall back." },
-  { t: "The long run is capped, and the cap is lower than you think", col: C.p4, b: "Bakken's own base week ran 180 km and his long run never exceeded 16 to 18 km. You are running 38 to 45 km a week, so your long run belongs at 11 to 14 km. The rule that actually protects you is that the long run never exceeds 30 percent of the week's running. Every long run in phase 1 is built to that rule, and the peak long run of the entire plan is 20 km in phase 4." },
-  { t: "Keep the easy training genuinely easy", col: C.p5, b: "You hold 140 bpm at 5:30/km, which sits comfortably inside your aerobic band. That is the pace, and it is correct. The failure mode is not running too slowly, it is letting easy days drift to 155 bpm where they are too hard to recover from and too easy to drive threshold adaptation. Bakken lists keeping easy training easy as one of his seven points for optimising the model. Nothing on this plan is a grey-zone session." },
-  { t: "Outdoors, heart rate is the only anchor", col: C.brick, b: "On the trainer, 26 km/h is a reasonable stand-in for effort because nothing else varies. On the road it means nothing: a four percent ramp out of Pamplona or a headwind off the mountains will halve your speed while your effort is identical. From week 5, zone 2 on the bike is defined by heart rate 150 to 165 and nothing else. This is not a detail — Seiler's work found that recreational riders default to moderate intensity on every ride because it feels productive, and it is the least effective distribution there is. Speed is what tempts you into that drift." },
-  { t: "Threshold on the bike stays on the trainer", col: C.p3, b: "Bakken kept experimenting with treadmill running for one reason: controlled conditions let you hold a narrow band, and the band is the mechanism. Your threshold zone is thirteen beats wide. Junctions, descents, traffic and terrain make holding it on the road close to impossible, and every minute spent above it is a minute of cost with no return. The Thursday session stays indoors permanently. Outdoors is for zone 2 volume, handling, and later for race-specific work." },
-  { t: "Hard day, easy day, and the strength sits with the bike", col: C.bike, b: "The Wilson meta-analysis of twenty-one studies found that resistance training concurrent with running produced significant decrements in both hypertrophy and strength, while resistance training concurrent with cycling did not. That is why every gym session in this plan is followed by a bike or a swim, never a run. It costs you nothing in triathlon terms and it protects the strength adaptation you are training three times a week to get." },
-  { t: "Two to three strength sessions builds, one maintains", col: C.gym, b: "Rønnestad and Mujika report that two sessions a week of heavy strength training, four to ten repetitions, two to three sets, two to three minutes of rest, is enough to build strength across a twelve-week block, and that roughly one low-volume high-intensity session a week maintains it during the competitive period. That is why the gym runs three times a week now while volume is low, and drops to one session by phase 4 without losing what you built." },
-  { t: "Progression rate is the injury lever, not stretching", col: C.warn, b: "Bakken is blunt about this: stretching and foam rolling feel good but produce no structural change and have no place in injury prevention for distance work. Nielsen's research points the same way — excessive progression in weekly running distance is what predicts running injury, moderated by body mass, surface and strength. The 3 percent rule and the long run cap are doing more for your durability than any mobility routine could." },
-  { t: "You cannot borrow the structure without the system underneath", col: C.p6, b: "The clearest warning in everything I read: if you run 10 miles a week and try to do 30 because that is what the Ingebrigtsens do, the structure has no relevance to you. They train that way inside a system of sleep, nutrition, physiotherapy and years of accumulated base. Copy the principles — intensity control, easy days easy, progression discipline — not the numbers. The numbers in this plan are yours." },
-];
+    var tue = [ rThr
+      ? S("7:00 AM","run","Run threshold · " + RUN_SET[n],
+          [["Pace",rThr + "/km"],["Heart rate","170–182"],["Total",w.run[0] + " km"]],
+          "Warm up 3 km, cool down 2 km. If the pace needs the heart rate above 182, the pace is wrong, not the band.")
+      : S("7:00 AM","run","Easy run · " + w.run[0] + " km",
+          [["Pace","≈ " + easyRun(n) + "/km"],["Heart rate","150–160"]],
+          "Hold the heart rate and let the pace come to you. The pace shown is a prediction, not a target.") ];
 
-// ── Storage ──────────────────────────────────────────────────────────────────
-const KEY = "tri703_final_v1";
-const empty = { weeks: {}, lifts: {}, tests: [] };
-let docRef = null;
-const ready = (async () => {
-  try {
-    const db = await window.claude?.use?.("db");
-    const user = await window.claude?.use?.("user");
-    if (db && user) { const uid = await user.id(); if (uid) docRef = db.doc("data/users/" + uid + "/plan"); }
-  } catch (e) {}
+    var wed = [
+      S("6:00 PM","gym","Day 1 · legs · " + w.gym + " min",
+        [["Load","4–10 reps"],["Sets",sets]],
+        "The only heavy leg session of the week. Drive the bar up fast even when it moves slowly."),
+      test
+        ? S("7:30 PM","test","Swim time trial · 1,000 m",
+            [["Target","19:10"],["Pace","1:55/100 m"]],
+            "Full warm-up first. This sets every swim pace in phase 2.")
+        : sThr
+          ? S("7:30 PM","swim","Swim threshold · " + SWIM_SET[n],
+              [["Pace",sThr + "/100 m"],["Total",s2 + " km"]],
+              "Plus warm-up and cool-down. Heart rate in water runs about 10 bpm below land, so go by the clock.")
+          : S("7:30 PM","swim","Aerobic swim · " + s2 + " km",
+              [["Pace",swimAer(n) + "/100 m"],["Effort","continuous"]],
+              "Steady, unbroken. Hold stroke count rather than chasing the clock."),
+    ];
+
+    var thu = [ (n === 3 || test)
+      ? S("6:30 PM","test","FTP test · 20 min maximum",
+          [["Warm-up","15 min"],["FTP","95% of the 20 min average"]],
+          n === 3 ? "The number the whole plan hangs on. Go out at a pace you can hold, not one you would like to hold."
+                  : "Target 275 W. Same protocol as week 3 so the comparison is clean.")
+      : bSet
+        ? S("6:30 PM","bike","Bike threshold · " + bSet,
+            [["Power",thrW(n)],["Heart rate","170–182"],["Total",hm(w.bike[1])]],
+            "On the trainer, permanently. Power first, heart rate second — heart rate lags 30 to 60 s into each rep.")
+        : S("6:30 PM","bike","Aerobic ride · " + hm(w.bike[1]),
+            [["Power",easyW(n)],["Heart rate","150–165"]],
+            "Indoors — classes all day. Aero position for most of it.") ];
+
+    var fri = [
+      S("7:00 AM","run","Easy run · " + w.run[1] + " km",
+        [["Pace","≈ " + easyRun(n) + "/km"],["Heart rate","150–160"]],
+        "Short by design. This run exists for frequency, not for load."),
+      S("2:00 PM","gym","Day 3 · shoulders, arms, core · " + w.gym + " min",
+        [["Load","6–15 reps"],["Sets",sets]],
+        "The lightest of the three and it stays that way. Saturday is tomorrow."),
+      S("3:45 PM","swim","Easy technique swim · " + s3 + " km",
+        [["Pace","easy"],["Set","none"]],
+        "No set, no clock. Drills and feel for the water."),
+    ];
+
+    var sat = [
+      S("9:00 AM","bike","Long ride · " + hm(w.bike[2]),
+        [["Power",easyW(n)],["Heart rate","150–165"],["Fuel","60–80 g carb/h"]],
+        "Outdoors above 5 °C and dry, otherwise Zwift. Aero position for as much of it as you can hold — that is half the point of the session."),
+    ];
+    if (w.run[3] > 0) sat.push(
+      S("Off the bike","brick","Brick run · " + w.run[3] + " km",
+        [["Pace","≈ " + longRun(n) + "/km"],["Heart rate","150–165"]],
+        "Shoes laid out before you leave. Not fast — the point is the first kilometre, not the last."));
+
+    var sun = [ test
+      ? S("9:00 AM","test","10 km time trial",
+          [["Target","40:30"],["Pace","4:03/km"]],
+          "Replaces the long run. This sets every run pace in phase 2.")
+      : S("9:00 AM","run","Long run · " + w.run[2] + " km",
+          [["Pace","≈ " + longRun(n) + "/km"],["Heart rate","150–165"]],
+          Math.round(w.run[2]/(w.run[0]+w.run[1]+w.run[2]+w.run[3])*100) + "% of the week's running — the long run never exceeds 30%.") ];
+    sun.push(S("After","mob","Mobility · 20 min", [["Then","log the week"]], ""));
+
+    return [
+      { d:"Mon", label:"Bike, strength, swim", ses:mon },
+      { d:"Tue", label: rThr ? "Run threshold" : "Aerobic run", ses:tue },
+      { d:"Wed", label:"Legs and swim", ses:wed },
+      { d:"Thu", label: (n===3||test) ? "FTP test" : (bSet ? "Bike threshold" : "Bike aerobic"), ses:thu },
+      { d:"Fri", label:"Run, strength, swim", ses:fri },
+      { d:"Sat", label:"Long ride and brick", ses:sat },
+      { d:"Sun", label: test ? "10 km time trial" : "Long run", ses:sun },
+    ];
+  }
+
+  // ── gym ────────────────────────────────────────────────────────────────
+  var GYM = [
+    { id:"Day 1", name:"Day 1 · Legs", day:"Wed", col:"var(--run)",
+      note:"Wednesday, three days before the long ride and the day after the hard run. Heavy legs 24 hours before Tuesday's threshold would ruin the run, and 24 hours before Saturday would ruin the ride. Thursday's trainer session is what this costs, and it is the cheapest one to spend. Rønnestad and Mujika: 4 to 10 reps, 2 to 3 sets, 2 to 3 minutes of rest, never to failure.",
+      ex:[
+        ["Back squat","3 × 5–6","3 min","Brace hard, parallel depth, drive up with intent. One rep short of failure.","Maximal force in the muscles that run and pedal"],
+        ["Romanian deadlift","3 × 6–8","2.5 min","Hinge at the hip, bar close, three seconds down.","Hamstring resilience and run economy"],
+        ["Bulgarian split squat","3 × 8 each","2 min","Rear foot elevated, knee tracks the toe, torso upright.","Single-leg propulsion — the highest-transfer lift here"],
+        ["Nordic hamstring curl","3 × 5","2 min","Lower as slowly as you can control, push back with the hands.","The one exercise with trial evidence against hamstring strains"],
+        ["Single-leg calf raise","3 × 12 each","60 s","Full range, pause at the bottom stretch.","Achilles stiffness, which is run economy"],
+        ["Hanging knee raise","3 × 10","60 s","No swing, curl the pelvis at the top.","Trunk stability under fatigue"],
+      ]},
+    { id:"Day 2", name:"Day 2 · Back, chest, core", day:"Mon", col:"var(--swim)",
+      note:"Monday, between the morning ride and the swim. Upper body only, deliberately, so Tuesday's run is completely untouched. Pulling outweighs pressing because swimming is a pulling sport and you have three swims a week to support.",
+      ex:[
+        ["Pull-up, weighted if you can","3 × 5–6","3 min","Full hang at the bottom, elbows to the hip pockets.","Lat strength through the catch phase"],
+        ["Bench press","3 × 6","2.5 min","Blades back and down, control the descent, no bounce.","Push phase of the stroke"],
+        ["Chest-supported row","3 × 8","2.5 min","Chest stays on the pad, row to the low ribs.","Mid-back endurance — what holds you aero for 90 km"],
+        ["Incline dumbbell press","3 × 8–10","2 min","Thirty to forty-five degrees, full stretch at the bottom.","Upper chest through the front of the stroke"],
+        ["Straight-arm pulldown","3 × 12–15","75 s","Arms straight, movement at the shoulder only.","Mimics the underwater pull almost exactly"],
+        ["Pallof press","3 × 10 each","60 s","Resist the rotation, do not create it. Ribs down.","Anti-rotation — what stops the hips swinging late in a run"],
+        ["Dead bug","3 × 8 each","60 s","Low back pressed into the floor the whole set.","Contralateral coordination under fatigue"],
+      ]},
+    { id:"Day 3", name:"Day 3 · Shoulders, arms, core", day:"Fri", col:"var(--bike)",
+      note:"Friday afternoon, between the morning run and Saturday's long ride. The lightest of the three and it stays that way, because Saturday is the biggest session of your week. The face pulls are not padding: three swims a week with a stroke still under construction is exactly the exposure that produces shoulder impingement.",
+      ex:[
+        ["Overhead press","3 × 6","2.5 min","Brace, press vertical, no lower back arch.","Shoulder strength through the recovery phase"],
+        ["Single-arm dumbbell row","3 × 8 each","2 min","Flat back, row to the hip, full stretch at the bottom.","Unilateral pull — the stroke is one arm at a time"],
+        ["Dips or close-grip bench","3 × 8","2 min","Elbows tucked, controlled depth, no shrug at the top.","Triceps through the finish of the pull"],
+        ["Lateral raise","3 × 12–15","60 s","Pinky leads, three seconds down, lighter than your ego wants.","Deltoid balance around the joint"],
+        ["Face pull","3 × 15","60 s","Pull to the forehead, rotate outward at the end, pause.","External rotators — insurance against swimmer's shoulder"],
+        ["Dumbbell curl","2 × 10","60 s","No swing, full extension at the bottom.","Elbow flexor balance, kept honest at two sets"],
+        ["Side plank","3 × 30–40 s each","45 s","Hips stacked and lifted, no sag.","Lateral trunk stability on the run"],
+      ]},
+  ];
+
+  // ── helpers ────────────────────────────────────────────────────────────
+  function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls;
+    if(html!=null) e.innerHTML=html; return e; }
+  function eyebrow(t){ return el("div","eyebrow",t); }
+  function tableIn(host, html){ var s=el("div","scroll"); var t=el("table"); t.innerHTML=html; s.appendChild(t); host.appendChild(s); }
+
+  // ── WEEK ───────────────────────────────────────────────────────────────
+  var curWeek = 3;
+  function renderWeek(){
+    var host = document.getElementById("week");
+    host.textContent = "";
+
+    var sel = el("div","wsel");
+    WEEKS.forEach(function(w){
+      var b = el("button", w.n===curWeek?"on":"",
+        '<span class="wn">'+w.n+'</span><span class="wt">'+(w.type==="load"?"load":w.type==="test"?"test":"easy")+'</span>');
+      b.addEventListener("click", function(){ curWeek=w.n; renderWeek(); window.scrollTo(0,0); });
+      sel.appendChild(b);
+    });
+    host.appendChild(sel);
+
+    var w = WEEKS.filter(function(x){return x.n===curWeek;})[0];
+    var bikeTot = w.bike[0]+w.bike[1]+w.bike[2];
+    var runTot = w.run[0]+w.run[1]+w.run[2]+w.run[3];
+
+    var head = el("div","card");
+    head.appendChild(eyebrow("Week "+w.n+" of 37 · "+w.dates));
+    [["Total","≈ "+w.hrs],["Swim",r1(w.swim)+" km"],["Bike",hm(bikeTot)],
+     ["Run",runTot+" km"],["Gym",w.gymN+" × "+w.gym+" min"],
+     ["Easy run","≈ "+easyRun(w.n)+"/km at 150–160"],["Working FTP",ftp(w.n)+" W"]].forEach(function(p){
+      var r=el("div","kv"); r.appendChild(el("span","k",p[0])); r.appendChild(el("span","v",p[1])); head.appendChild(r);
+    });
+    head.appendChild(el("p","note",w.note));
+    host.appendChild(head);
+
+    buildWeek(w).forEach(function(d){
+      var box = el("div","day");
+      var h = el("div","dhead");
+      h.appendChild(el("span","dname",d.d));
+      h.appendChild(el("span","dlabel",d.label));
+      box.appendChild(h);
+      d.ses.forEach(function(s){
+        var row = el("div","ses");
+        row.appendChild(el("span","hh",s.h));
+        var p = el("span","pill",s.t);
+        p.style.background = COL[s.t];
+        row.appendChild(p);
+        var body = el("div","sbody");
+        body.appendChild(el("div","stitle",s.title));
+        if (s.targets && s.targets.length){
+          var tg = el("div","starg");
+          s.targets.forEach(function(x){
+            tg.appendChild(el("span",null,'<span class="lab">'+x[0]+'</span> <b>'+x[1]+'</b>'));
+          });
+          body.appendChild(tg);
+        }
+        if (s.cue) body.appendChild(el("div","scue",s.cue));
+        row.appendChild(body);
+        box.appendChild(row);
+      });
+      host.appendChild(box);
+    });
+  }
+
+  // ── PROGRESSION ────────────────────────────────────────────────────────
+  function renderProg(){
+    var host = document.getElementById("prog");
+    host.textContent = "";
+
+    var c1 = el("div","card");
+    c1.appendChild(eyebrow("Week by week · where you should be"));
+    var rows = "<tr><th>Wk</th><th>Easy run</th><th>Long run</th><th>Run thr</th><th>Swim aer</th><th>Swim thr</th><th>FTP</th><th class='r'>Bike thr</th></tr>";
+    WEEKS.forEach(function(w){
+      var cls = w.type==="deload" ? " class='dl'" : w.type==="test" ? " class='ts'" : "";
+      rows += "<tr"+cls+"><td class='big'>"+w.n+"</td><td>"+easyRun(w.n)+"</td><td>"+longRun(w.n)+
+        "</td><td>"+(RUN_THR[w.n]||"—")+"</td><td>"+swimAer(w.n)+"</td><td>"+(SWIM_THR[w.n]||"—")+
+        "</td><td>"+ftp(w.n)+" W</td><td class='r'>"+thrW(w.n)+"</td></tr>";
+    });
+    tableIn(c1, rows);
+    c1.appendChild(el("p","note","Run and swim paces are per kilometre and per 100 m. <b>These are predictions, not instructions.</b> What you hold constant is the heart rate; the pace is what should drift downward underneath it, and that drift is the cleanest measure of aerobic improvement you own. Ahead of the line means you are ahead of schedule. Behind it means more easy volume, not faster easy running."));
+    host.appendChild(c1);
+
+    var c2 = el("div","card");
+    c2.appendChild(eyebrow("Heart rate · measured max 200"));
+    tableIn(c2, "<tr><th>Band</th><th>bpm</th><th>% max</th><th class='r'>Where it appears</th></tr>" +
+      "<tr><td class='big'>Recovery</td><td>under 145</td><td>&lt;73%</td><td class='r'>Shakeouts, mobility</td></tr>" +
+      "<tr><td class='big'>Easy</td><td>150–160</td><td>75–80%</td><td class='r'>Tue and Fri runs</td></tr>" +
+      "<tr><td class='big'>Aerobic</td><td>150–165</td><td>75–83%</td><td class='r'>All bike, long run, brick</td></tr>" +
+      "<tr><td class='big'>Threshold</td><td>170–182</td><td>85–91%</td><td class='r'>All threshold work</td></tr>");
+    c2.appendChild(el("p","note","Built from a measured maximum of 200, not from 220 minus your age. The threshold band is where lactate sits between 2.3 and 3.0 mmol — the range Bakken works in, deliberately below the traditional 4.0. <b>In the water, heart rate runs roughly 10 bpm lower</b> for the same effort, so swim sessions are prescribed by the pace clock, not the strap."));
+    host.appendChild(c2);
+
+    var c3 = el("div","card");
+    c3.appendChild(eyebrow("Checkpoints"));
+    [["Week 6 · 30 Nov","Easy running around <b>5:12/km at 155 bpm</b>. Swim threshold holding 2:00/100 m for 6 × 100 m without the last rep falling apart. If easy pace has not moved at all since week 3, the problem is almost always that your easy days are too hard."],
+     ["Week 9 · 21 Dec","Easy running around <b>5:06/km at 155 bpm</b>. Bike threshold holding 95–100% of FTP for 2 × 8 min. You should be able to sit aero for 45 unbroken minutes without your neck or lower back forcing you up."],
+     ["Week 12 · test block","<b>1,000 m swim in 19:10</b> (1:55/100 m) · <b>FTP 275 W</b> (3.93 W/kg) · <b>10 km in 40:30</b> (4:03/km). These three numbers write phase 2. Miss one badly and we change the plan rather than the athlete."]
+    ].forEach(function(x){ c3.appendChild(el("h3",null,x[0])); c3.appendChild(el("p","chk",x[1])); });
+    host.appendChild(c3);
+
+    var c4 = el("div","card");
+    c4.appendChild(eyebrow("What those numbers mean for July"));
+    tableIn(c4, "<tr><th>If FTP reaches</th><th>Race power at 75%</th><th>Speed aero</th><th class='r'>90 km</th></tr>" +
+      "<tr class='dl'><td>275 W · end of phase 1</td><td>206 W</td><td>37.4 km/h</td><td class='r'>2:24</td></tr>" +
+      "<tr><td class='big'>290 W · end of phase 2</td><td class='big'>218 W</td><td>38.2 km/h</td><td class='r big'>2:21</td></tr>" +
+      "<tr><td class='big'>300 W · race ready</td><td class='big'>225 W</td><td>38.6 km/h</td><td class='r big'>2:19</td></tr>");
+    c4.appendChild(el("p","note","All three rows assume a tri-bike position at CdA 0.25. On the hoods, every one of them is roughly twenty minutes slower — which is the whole argument for getting aero bars now rather than in spring."));
+    host.appendChild(c4);
+  }
+
+  // ── PHASE ──────────────────────────────────────────────────────────────
+  function renderPhase(){
+    var host = document.getElementById("phase");
+    host.textContent = "";
+
+    var pc = el("div","card");
+    pc.appendChild(eyebrow("The 34 weeks"));
+    tableIn(pc, "<tr><th>Phase</th><th>Weeks</th><th class='r'>Dates</th></tr>" +
+      "<tr><td class='big'>Base completion</td><td>3–12</td><td class='r'>9 Nov – 17 Jan</td></tr>" +
+      "<tr><td class='big'>Threshold build</td><td>13–24</td><td class='r'>18 Jan – 11 Apr</td></tr>" +
+      "<tr><td class='big'>Race specific</td><td>25–33</td><td class='r'>12 Apr – 13 Jun</td></tr>" +
+      "<tr><td class='big'>Sharpen and taper</td><td>34–37</td><td class='r'>14 Jun – 11 Jul</td></tr>");
+    pc.appendChild(el("p","note","Only phase 1 is written. The three that follow are shaped by what the week 12 test block says, which is the point of testing rather than assuming."));
+    host.appendChild(pc);
+
+    var vc = el("div","card");
+    vc.appendChild(eyebrow("Phase 1 volume"));
+    var rows = "<tr><th>Wk</th><th>Swim</th><th>Bike</th><th>Run</th><th>Sat</th><th class='r'>Total</th></tr>";
+    WEEKS.forEach(function(w){
+      var bikeTot=w.bike[0]+w.bike[1]+w.bike[2], runTot=w.run[0]+w.run[1]+w.run[2]+w.run[3];
+      var cls = w.type==="deload" ? " class='dl'" : w.type==="test" ? " class='ts'" : "";
+      rows += "<tr"+cls+"><td class='big'>"+w.n+"</td><td>"+r1(w.swim)+" km</td><td>"+hm(bikeTot)+
+        "</td><td>"+runTot+" km</td><td>"+hm(w.bike[2])+"</td><td class='r big'>"+w.hrs+"</td></tr>";
+    });
+    tableIn(vc, rows);
+    vc.appendChild(el("p","note","Hours ramp from 11:34 to 15:41 across ten weeks — about 35% — which is why it arrives over ten weeks rather than next Monday. Grey rows are reduced weeks, the last is the test block."));
+    host.appendChild(vc);
+
+    var nc = el("div","card");
+    nc.appendChild(eyebrow("Where intensity enters"));
+    [["Week 5 · swim","Swimming carries no impact and almost no injury risk, so threshold starts here and nowhere earlier."],
+     ["Week 7 · bike","Cycling carries no impact either, so it enters second — on the trainer, and it stays there, because the band is thirteen beats wide and Navarran roads in winter will not let you hold it."],
+     ["Week 8 · run","Running is where the injuries come from, so it enters last and arrives as short repetitions rather than continuous tempo."]
+    ].forEach(function(p){ nc.appendChild(el("h3",null,p[0])); nc.appendChild(el("p",null,p[1])); });
+    host.appendChild(nc);
+  }
+
+  // ── TARGETS ────────────────────────────────────────────────────────────
+  function renderTarget(){
+    var host = document.getElementById("target");
+    host.textContent = "";
+
+    var b = el("div","card");
+    b.appendChild(eyebrow("The time budget"));
+    tableIn(b, "<tr><th>Leg</th><th>Simulation</th><th>Target</th><th class='r'>Gain</th></tr>" +
+      "<tr><td class='big'>Swim 1.9 km</td><td>40:42</td><td>32:00</td><td class='r'>−8:42</td></tr>" +
+      "<tr><td class='big'>Bike 90 km</td><td>2:36 <span style='color:#5A7080'>Zwift</span></td><td>2:18</td><td class='r'>−18:00</td></tr>" +
+      "<tr><td class='big'>Run 21.1 km</td><td>1:39:59</td><td>1:30:00</td><td class='r'>−9:59</td></tr>" +
+      "<tr><td class='big'>Transitions</td><td>—</td><td>5:00</td><td class='r'>—</td></tr>" +
+      "<tr><td class='big'>Total</td><td class='big'>4:56:41</td><td class='big' style='color:var(--ok)'>4:25:00</td><td class='r'>—</td></tr>");
+    b.appendChild(el("p","note flag","Your own three targets — 28:30, 2:30 and 1:30 — add to 4:28:30 of <b>moving</b> time. Transitions cost four to six minutes even when they go well, so hitting all three perfectly lands at 4:33:30, not under 4:30. That is why the swim target came down and the bike target went up."));
+    host.appendChild(b);
+
+    var p = el("div","card");
+    p.appendChild(eyebrow("The bike, honestly"));
+    p.appendChild(el("p",null,"The simulation was on Zwift. The measured number is <b>186 W</b> for 2:36 — 2.66 W/kg — confirmed by the work total of 1,753 kJ. Zwift's avatar is more aerodynamic than you are on the hoods, so your true outdoor equivalent of that ride is nearer 2:51."));
+    tableIn(p, "<tr><th>186 W outdoors, flat</th><th class='r'>Speed</th><th class='r'>90 km</th></tr>" +
+      "<tr><td>Road bike, hoods</td><td class='r'>31.6</td><td class='r'>2:51</td></tr>" +
+      "<tr><td>Road bike, drops</td><td class='r'>33.3</td><td class='r'>2:42</td></tr>" +
+      "<tr><td>Clip-on aero bars</td><td class='r'>34.4</td><td class='r'>2:37</td></tr>" +
+      "<tr><td class='big'>Tri bike</td><td class='r big'>36.0</td><td class='r big'>2:30</td></tr>");
+    p.appendChild(el("p","note win","Read the last row again. <b>Your 2:30 target needs no new fitness at all — only a position.</b> A tri bike at the 186 W you already hold rides 36 km/h on a flat course. The 2:18 we actually want needs about 233 W in that position: a 25% power gain over 34 weeks, which is an ordinary outcome for someone who has never trained the bike with structure."));
+    p.appendChild(el("p","note","Aero time is also free time: you reach T2 having spent less, not more, which is what makes a 1:30 run plausible rather than optimistic."));
+    host.appendChild(p);
+
+    var r = el("div","card");
+    r.appendChild(eyebrow("Race day notes"));
+    [["July in Asunción","Southern-hemisphere winter — roughly 13 to 24 °C. You train through a Spanish summer and race somewhere mild, which is the favourable direction."],
+     ["The river swim","Likely wetsuit-legal, worth another four to six seconds per 100 m to a developing swimmer. Train in it rather than meeting it on race morning."],
+     ["Flat course","No climbing means no recovery from the position either. Ninety kilometres continuously aero is a demand in itself, and the only preparation is doing it."],
+     ["Qualifying","World Championship slots are allocated per age group by field size, so the time that qualifies depends on who turns up in M18–24 that day. Sub-4:30 is usually competitive in that group. It is not a guarantee, and the plan is built around the time rather than the slot."]
+    ].forEach(function(x){ r.appendChild(el("h3",null,x[0])); r.appendChild(el("p",null,x[1])); });
+    host.appendChild(r);
+  }
+
+  // ── GYM ────────────────────────────────────────────────────────────────
+  var curGym = "Day 1";
+  function renderGym(){
+    var host = document.getElementById("gym");
+    host.textContent = "";
+    var sel = el("div","wsel");
+    GYM.forEach(function(g){
+      var b = el("button", g.id===curGym?"on":"",
+        '<span class="wn" style="font-size:11px">'+g.id.replace("Day ","D")+'</span><span class="wt">'+g.day+'</span>');
+      b.style.minWidth = "62px";
+      b.addEventListener("click", function(){ curGym=g.id; renderGym(); });
+      sel.appendChild(b);
+    });
+    host.appendChild(sel);
+
+    var g = GYM.filter(function(x){return x.id===curGym;})[0];
+    var c = el("div","card");
+    var h = el("h3",null,g.name); h.style.color = g.col;
+    c.appendChild(h);
+    c.appendChild(el("p","note",g.note));
+    host.appendChild(c);
+
+    var list = el("div","card");
+    g.ex.forEach(function(e){
+      var box = el("div","ex");
+      var left = el("div",null); left.style.flex = "1";
+      left.appendChild(el("div","exn",e[0]));
+      left.appendChild(el("div","exc",e[3]));
+      left.appendChild(el("div","exc",'<span style="color:'+g.col+'">→</span> '+e[4]));
+      box.appendChild(left);
+      var right = el("div",null); right.style.textAlign = "right";
+      right.appendChild(el("div","exs",e[1]));
+      right.appendChild(el("div","exc",e[2]+" rest"));
+      box.appendChild(right);
+      list.appendChild(box);
+    });
+    host.appendChild(list);
+  }
+
+  // ── METHOD ─────────────────────────────────────────────────────────────
+  function renderMethod(){
+    var host = document.getElementById("method");
+    host.textContent = "";
+    [["Keep the easy training genuinely easy",
+      "The failure mode is not running too slowly, it is letting easy days drift to 170 bpm where they are too hard to recover from and too easy to drive threshold adaptation. Seiler found recreational athletes default to moderate intensity on every session because it feels productive, and it is the least effective distribution there is. Every pace in the Progression tab is a <b>prediction</b> at a fixed heart rate — hold the band, let the pace fall underneath it.",0],
+     ["One threshold session per discipline, never two",
+      "Tveiten on the Norwegian triathlon group: they do a great deal of double threshold, but because there are three disciplines it is always one session of each. By week 11 you carry three threshold sessions across three disciplines, and no discipline ever carries two in a day.",0],
+     ["The long run is capped at 30% of the week",
+      "Bakken's own base week ran 180 km and his long run never exceeded 16 to 18 km. You run 31 to 38 km a week, so your long run belongs at 8 to 11 km. It looks short for a 1:30 half and it is — the answer is more weekly volume in phase 2, not a longer Sunday now.",0],
+     ["Strength is neural, not size",
+      "Rønnestad and Mujika: 4 to 10 reps, 2 to 3 sets, 2 to 3 minutes of rest, two sessions a week in the preparatory period and about one in-season, never to failure. The mechanism is more force per unit of muscle and better economy. Extra upper-body mass is weight you carry for 113 km and it gives nothing back.",0],
+     ["The compressed calendar, and its one real risk",
+      "A 19-month build would put run threshold at week 9 of a 13-week base. You have 34 weeks to a confirmed race, so it enters at week 8, earlier than the evidence prefers. Nielsen's work points at <b>progression rate in weekly running</b> as the thing that predicts injury. If anything in your shins, achilles or hamstrings starts talking, delete the Friday run first, then the Tuesday threshold. Losing those costs very little. Losing eight weeks costs the race.",1],
+     ["Three gym sessions is one more than the evidence asks for",
+      "You asked for three and phase 1 has three. For phase 2 I will argue for two, because Rønnestad and Mujika found two sufficient in the preparatory period, and that third hour is worth more on the bike — which is where, on the numbers, almost all of your remaining time is.",1]
+    ].forEach(function(p){
+      var c = el("div","card");
+      c.appendChild(el("h3",null,p[0]));
+      c.appendChild(el("p", p[2] ? "note flag" : "note", p[1]));
+      host.appendChild(c);
+    });
+  }
+
+  // ── tabs ───────────────────────────────────────────────────────────────
+  var SECTS = ["week","prog","phase","target","gym","method"];
+  var renderers = { week:renderWeek, prog:renderProg, phase:renderPhase, target:renderTarget, gym:renderGym, method:renderMethod };
+  var rendered = {};
+  var tabs = Array.prototype.slice.call(document.querySelectorAll("nav button"));
+  function show(name){
+    tabs.forEach(function(b){ b.classList.toggle("on", b.dataset.t===name); });
+    SECTS.forEach(function(s){ document.getElementById(s).classList.toggle("hide", s!==name); });
+    if (!rendered[name]) { renderers[name](); rendered[name]=true; }
+    window.scrollTo(0,0);
+  }
+  tabs.forEach(function(b){ b.addEventListener("click", function(){ show(b.dataset.t); }); });
+
+  (function(){
+    var race = new Date(2027,6,11);
+    var days = Math.ceil((race - new Date())/86400000);
+    document.getElementById("cd").textContent = days + " days · " + Math.floor(days/7) + " weeks";
+  })();
+
+  renderWeek();
 })();
-const load = async () => {
-  try { await ready; } catch (e) {}
-  if (docRef) { try { const snap = await docRef.get(); if (snap.exists) return { ...empty, ...snap.data() }; } catch (e) {} }
-  try { const raw = localStorage.getItem(KEY); if (raw) return { ...empty, ...JSON.parse(raw) }; } catch (e) {}
-  return empty;
-};
-const save = async (d) => {
-  try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {}
-  try { await ready; } catch (e) {}
-  if (docRef) { try { await docRef.set(d); } catch (e) { return false; } }
-  return true;
-};
-
-// ── Small components ─────────────────────────────────────────────────────────
-const input = { background: C.bg, border: `1px solid ${C.border}`, borderRadius: 6, color: C.text, padding: "7px 9px", fontSize: 12, width: "100%", boxSizing: "border-box" };
-
-const Pill = ({ t }) => {
-  const [l, c] = TAG(t);
-  return <span style={{ background: c + "26", color: c, fontSize: 10, fontWeight: 700, padding: "3px 7px", borderRadius: 4, marginRight: 8, flexShrink: 0, whiteSpace: "nowrap" }}>{l}</span>;
-};
-
-const Card = ({ children, style }) => (
-  <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 12, padding: 14, marginBottom: 10, ...style }}>{children}</div>
-);
-
-const Eyebrow = ({ children, col }) => (
-  <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", color: col || C.muted, marginBottom: 6 }}>{children}</div>
-);
-
-const DayBlock = ({ d }) => (
-  <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 10, marginBottom: 6, overflow: "hidden" }}>
-    <div style={{ background: C.dim, padding: "7px 12px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-      <span style={{ fontSize: 11.5, fontWeight: 700, color: C.text, letterSpacing: "0.04em" }}>{d.d}</span>
-      <span style={{ fontSize: 10.5, color: C.muted }}>{d.label}</span>
-    </div>
-    <div style={{ padding: "2px 12px 8px" }}>
-      {d.ses.map((s, j) => (
-        <div key={j} style={{ display: "flex", alignItems: "flex-start", padding: "9px 0", borderBottom: j < d.ses.length - 1 ? `1px solid ${C.border}` : "none" }}>
-          {s.h && <span style={{ fontSize: 10, fontWeight: 700, color: C.muted, minWidth: 58, flexShrink: 0, paddingTop: 2, letterSpacing: "0.02em" }}>{s.h}</span>}
-          <Pill t={s.t} />
-          <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.55 }}>{s.x}</div>
-        </div>
-      ))}
-    </div>
-  </div>
-);
-
-function ExRow({ ex, col, last, onLog }) {
-  const [w, setW] = useState(""); const [r, setR] = useState("");
-  return (
-    <div style={{ background: C.dim, borderRadius: 10, padding: 12, marginBottom: 7 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
-        <div style={{ fontSize: 13.5, fontWeight: 600 }}>{ex.n}</div>
-        <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
-          <span style={{ background: col + "26", color: col, fontSize: 10.5, padding: "3px 7px", borderRadius: 5, fontWeight: 600 }}>{ex.s} × {ex.r}</span>
-          <span style={{ background: C.border, color: C.muted, fontSize: 10.5, padding: "3px 7px", borderRadius: 5 }}>{ex.rest}</span>
-        </div>
-      </div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
-        <div><Eyebrow>Cue</Eyebrow><div style={{ fontSize: 11.5, color: "#93AEBE", lineHeight: 1.5 }}>{ex.cue}</div></div>
-        <div><Eyebrow>Transfer</Eyebrow><div style={{ fontSize: 11.5, color: col, lineHeight: 1.5 }}>{ex.tr}</div></div>
-      </div>
-      <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", borderTop: `1px solid ${C.border}`, paddingTop: 10 }}>
-        <input value={w} onChange={(e) => setW(e.target.value)} placeholder="kg" inputMode="decimal" style={{ ...input, width: 60 }} />
-        <input value={r} onChange={(e) => setR(e.target.value)} placeholder="reps" inputMode="numeric" style={{ ...input, width: 60 }} />
-        <button onClick={() => { if (w) { onLog(w, r); setW(""); setR(""); } }} style={{ background: col, border: "none", borderRadius: 6, color: "#FFF", fontSize: 11.5, fontWeight: 600, padding: "8px 12px", cursor: "pointer" }}>Log</button>
-        <div style={{ fontSize: 11, color: C.muted, marginLeft: "auto" }}>{last ? `Last: ${last.w} kg${last.r ? " × " + last.r : ""} · ${last.date.slice(5)}` : "No log yet"}</div>
-      </div>
-    </div>
-  );
-}
-
-// ── App ──────────────────────────────────────────────────────────────────────
-function App() {
-  const today = new Date().toISOString().slice(0, 10);
-  const [tab, setTab] = useState("p1");
-  const [wk, setWk] = useState(0);
-  const [ph, setPh] = useState(2);
-  const [gym, setGym] = useState("A");
-  const [data, setData] = useState(empty);
-  const [note, setNote] = useState("");
-  const [form, setForm] = useState({ swim: "", bike: "", run: "", hours: "", rhr: "", sleep: "", feel: "", txt: "" });
-
-  useEffect(() => { let go = true; load().then((d) => go && setData(d)); return () => { go = false; }; }, []);
-
-  const persist = async (n) => { setData(n); setNote("Saving"); const ok = await save(n); setNote(ok ? "Saved" : "Could not save"); setTimeout(() => setNote(""), 1500); };
-
-  const W = P1[wk];
-  const days = buildWeek(W);
-  const G = GYM[gym];
-  const lastLift = (n) => { const l = data.lifts[n]; return l && l.length ? l[l.length - 1] : null; };
-  const logLift = (n, w, r) => persist({ ...data, lifts: { ...data.lifts, [n]: [...(data.lifts[n] || []), { date: today, w, r }].slice(-40) } });
-
-  const nextW = P1[Math.min(wk + 1, P1.length - 1)];
-  const saveWeek = () => { if (!form.swim && !form.run && !form.hours) return; persist({ ...data, weeks: { ...data.weeks, [`W${W.n}`]: { ...form } } }); };
-
-  const tabs = [["p1", "Phase 1"], ["later", "Phases 2 to 6"], ["gym", "Gym"], ["method", "Method"], ["targets", "Targets"], ["review", "Sunday review"]];
-
-  const typeColour = W.type === "deload" ? C.ok : W.type === "test" ? C.race : C.p1;
-  const typeLabel = W.type === "deload" ? "Deload week" : W.type === "test" ? "Test week" : "Load week";
-
-  return (
-    <div style={{ fontFamily: "'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", background: C.bg, minHeight: "100vh", color: C.text }}>
-
-      <div style={{ background: "linear-gradient(160deg,#080E18,#0A1220)", padding: "20px 16px 14px", borderBottom: `1px solid ${C.border}` }}>
-        <div style={{ maxWidth: 900, margin: "0 auto" }}>
-          <Eyebrow>Half Ironman 70.3 · Norwegian method applied to three disciplines</Eyebrow>
-          <div style={{ fontSize: 32, fontWeight: 800, color: "#FFF", letterSpacing: "-0.02em", lineHeight: 1 }}>4:45:00</div>
-          <div style={{ fontSize: 11.5, color: C.muted, marginTop: 5 }}>81 weeks · race not yet confirmed · phase 1 written in full, later phases as one representative week each</div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 6, marginTop: 14 }}>
-            {[["1:20 /100 m", "Swim target", C.swim], ["36 km/h", "Bike target", C.bike], ["4:16 /km", "Run target", C.run]].map(([v, l, c]) => (
-              <div key={l} style={{ background: c + "15", border: `1px solid ${c}33`, borderRadius: 8, padding: "8px 10px" }}>
-                <div style={{ fontSize: 14, fontWeight: 700, color: c }}>{v}</div>
-                <div style={{ fontSize: 10.5, color: C.muted, marginTop: 2 }}>{l}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div style={{ display: "flex", background: C.surface, borderBottom: `1px solid ${C.border}`, overflowX: "auto", position: "sticky", top: 0, zIndex: 5 }}>
-        {tabs.map(([id, l]) => (
-          <button key={id} onClick={() => setTab(id)} style={{ padding: "12px 15px", fontSize: 12.5, fontWeight: tab === id ? 600 : 400, color: tab === id ? "#5AAEE0" : C.muted, background: "transparent", border: "none", borderBottom: tab === id ? "2px solid #5AAEE0" : "2px solid transparent", cursor: "pointer", whiteSpace: "nowrap" }}>{l}</button>
-        ))}
-        {note && <div style={{ marginLeft: "auto", alignSelf: "center", paddingRight: 14, fontSize: 11, color: note === "Saved" ? C.ok : C.muted }}>{note}</div>}
-      </div>
-
-      <div style={{ padding: 16, maxWidth: 900, margin: "0 auto" }}>
-
-        {/* Phase 1 */}
-        {tab === "p1" && (
-          <div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(13,1fr)", gap: 3, marginBottom: 12 }}>
-              {P1.map((w, i) => {
-                const c = w.type === "deload" ? C.ok : w.type === "test" ? C.race : C.p1;
-                const on = wk === i;
-                return (
-                  <button key={w.n} onClick={() => setWk(i)} style={{ background: on ? c : c + "18", border: `1px solid ${on ? c : c + "44"}`, borderRadius: 6, padding: "8px 0", cursor: "pointer", color: on ? "#FFF" : c, fontSize: 11.5, fontWeight: 700 }}>{w.n}</button>
-                );
-              })}
-            </div>
-
-            <Card style={{ background: "#071820", border: `1px solid ${typeColour}55` }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10, flexWrap: "wrap", marginBottom: 10 }}>
-                <div>
-                  <Eyebrow col={typeColour}>Phase 1 · {W.block}</Eyebrow>
-                  <div style={{ fontSize: 20, fontWeight: 700, color: "#EEE" }}>Week {W.n} of 13</div>
-                  <div style={{ fontSize: 11.5, color: C.muted, marginTop: 3 }}>{W.hrs} endurance · plus {W.gym} in the gym</div>
-                </div>
-                <div style={{ background: typeColour + "22", border: `1px solid ${typeColour}55`, borderRadius: 6, padding: "5px 11px", fontSize: 11.5, color: typeColour, fontWeight: 600 }}>{typeLabel}</div>
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 6, marginBottom: 10 }}>
-                {[["Swim", `${W.swim} km`, C.swim], ["Bike", `${Math.floor(W.bike / 60)}h ${W.bike % 60}m`, C.bike], ["Run", `${W.run} km`, C.run], ["Long run", `${W.long} km`, C.brick]].map(([k, v, c]) => (
-                  <div key={k} style={{ background: "#0A1218", borderRadius: 8, padding: "9px 10px", border: `1px solid ${c}22` }}>
-                    <div style={{ fontSize: 10.5, color: C.muted }}>{k}</div>
-                    <div style={{ fontSize: 15, fontWeight: 700, color: c, marginTop: 2 }}>{v}</div>
-                  </div>
-                ))}
-              </div>
-              <div style={{ fontSize: 12, color: "#8AA8B8", lineHeight: 1.65 }}>{W.note}</div>
-              {W.thr.length > 0 && (
-                <div style={{ marginTop: 10, fontSize: 11.5, color: typeColour }}>
-                  Threshold this week: {W.thr.map((t) => TAG(t)[0].toLowerCase()).join(", ")} · all of it at 152 to 165 bpm
-                </div>
-              )}
-            </Card>
-
-            {W.n >= 4 && W.n <= 7 && (
-              <Card style={{ background: "#1A0F04", border: `1px solid ${C.brick}55` }}>
-                <Eyebrow col={C.brick}>Road bike from week 5</Eyebrow>
-                <div style={{ fontSize: 12, color: "#D6A87A", lineHeight: 1.7 }}>
-                  {W.n === 4 && "Fit the bike this week, not next. A professional fit before the first real ride is worth more than any component on it, and a position error takes about ten days to turn into knee pain. Ride it once or twice easy, thirty minutes, just to find out what needs moving."}
-                  {W.n === 5 && "Saturday is 2:45 outdoors, the same as week 3 indoors. The duration is deliberately unchanged because it is not the new thing — the position, the road surface, the descending and the handling all are. Rolling roads only. No climbs, no group, no Strava segments. If your knees or your neck complain, that is a fit problem and it gets solved before week 6, not after."}
-                  {W.n === 6 && "Three hours, fifteen minutes longer than last week, and that is the rate for the rest of the phase up to 4:30 in week 11. Bike threshold starts today and lives on the trainer for good: holding 152 to 165 bpm through junctions and descents is not realistic, and the narrow band is the entire mechanism."}
-                  {W.n === 7 && "3:15, which is long enough that fuelling is now training rather than logistics. Take 60 to 80 g of carbohydrate an hour, starting at minute 30, and take it while moving. The gut adapts more slowly than the legs and it needs the full eighteen months."}
-                </div>
-              </Card>
-            )}
-
-            {days.map((d, i) => <DayBlock key={i} d={d} />)}
-
-            <Card style={{ marginTop: 12 }}>
-              <Eyebrow>Volume across the phase</Eyebrow>
-              <div style={{ overflowX: "auto" }}>
-                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11.5, minWidth: 480 }}>
-                  <thead>
-                    <tr style={{ borderBottom: `2px solid ${C.border}` }}>
-                      {["Week", "Type", "Swim", "Bike", "Sat ride", "Run", "Long", "Hours"].map((h, i) => (
-                        <th key={h} style={{ padding: "8px 6px", textAlign: i === 0 ? "left" : "center", fontSize: 9.5, fontWeight: 700, letterSpacing: "0.06em", color: C.muted }}>{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {P1.map((w, i) => {
-                      const c = w.type === "deload" ? C.ok : w.type === "test" ? C.race : C.text;
-                      return (
-                        <tr key={w.n} onClick={() => setWk(i)} style={{ borderBottom: `1px solid ${C.border}`, cursor: "pointer", background: wk === i ? "#101A24" : "transparent" }}>
-                          <td style={{ padding: "8px 6px", fontWeight: 700, color: c }}>{w.n}</td>
-                          <td style={{ padding: "8px 6px", textAlign: "center", color: C.muted, fontSize: 10.5 }}>{w.type}</td>
-                          <td style={{ padding: "8px 6px", textAlign: "center", color: C.swim }}>{w.swim}</td>
-                          <td style={{ padding: "8px 6px", textAlign: "center", color: C.bike }}>{Math.floor(w.bike / 60)}h{String(w.bike % 60).padStart(2, "0")}</td>
-                          <td style={{ padding: "8px 6px", textAlign: "center", color: w.out ? C.brick : C.muted, fontWeight: w.out ? 600 : 400 }}>{hm(w.sat)}{w.out ? " out" : ""}</td>
-                          <td style={{ padding: "8px 6px", textAlign: "center", color: C.run }}>{w.run}</td>
-                          <td style={{ padding: "8px 6px", textAlign: "center", color: C.brick }}>{w.long}</td>
-                          <td style={{ padding: "8px 6px", textAlign: "center", color: C.text }}>{w.hrs}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-              <div style={{ fontSize: 11.5, color: C.muted, lineHeight: 1.6, marginTop: 10 }}>
-                Every load week adds 3%. Deloads drop to 65% of the week before them. Each block restarts where the last one finished rather than above it, which is what keeps thirteen weeks of 3% from compounding into something unsurvivable. If your current running is below 35 km a week, scale every run number by the ratio and keep the shape.
-              </div>
-            </Card>
-          </div>
-        )}
-
-        {/* Later phases */}
-        {tab === "later" && (
-          <div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 4, marginBottom: 12 }}>
-              {PHASES.slice(1).map((p) => (
-                <button key={p.id} onClick={() => setPh(p.id)} style={{ background: ph === p.id ? p.col : p.col + "18", border: `1px solid ${ph === p.id ? p.col : p.col + "44"}`, borderRadius: 7, padding: "9px 4px", cursor: "pointer", textAlign: "center" }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: ph === p.id ? "#FFF" : p.col }}>Phase {p.id}</div>
-                  <div style={{ fontSize: 9, color: ph === p.id ? "rgba(255,255,255,0.6)" : C.muted, marginTop: 2 }}>{p.gym} gym</div>
-                </button>
-              ))}
-            </div>
-
-            {(() => {
-              const P = PHASES.find((x) => x.id === ph);
-              return (
-                <>
-                  <Card style={{ border: `1px solid ${P.col}55` }}>
-                    <Eyebrow col={P.col}>Phase {P.id} · {P.weeks} weeks · {P.dates}</Eyebrow>
-                    <div style={{ fontSize: 19, fontWeight: 700, color: "#EEE", marginBottom: 4 }}>{P.name}</div>
-                    <div style={{ fontSize: 12, color: "#8AA8B8", lineHeight: 1.65, marginBottom: 10 }}>{P.focus}</div>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 6, marginBottom: 10 }}>
-                      {[["Swim", P.swimTarget, C.swim], ["Run", P.runTarget, C.run], ["Bike", P.bikeTarget, C.bike]].map(([k, v, c]) => (
-                        <div key={k} style={{ background: "#0A1218", borderRadius: 8, padding: "8px 10px", border: `1px solid ${c}22` }}>
-                          <div style={{ fontSize: 10.5, color: C.muted }}>{k}</div>
-                          <div style={{ fontSize: 14, fontWeight: 700, color: c, marginTop: 2 }}>{v}</div>
-                        </div>
-                      ))}
-                    </div>
-                    <div style={{ background: P.col + "15", borderRadius: 8, padding: "9px 12px" }}>
-                      <Eyebrow col={P.col}>Key session</Eyebrow>
-                      <div style={{ fontSize: 12, color: C.text, lineHeight: 1.5 }}>{P.key}</div>
-                    </div>
-                  </Card>
-                  <div style={{ fontSize: 11.5, color: C.muted, marginBottom: 10 }}>One representative load week. The full thirteen weeks get written when you finish phase 1 and we have your test numbers.</div>
-                  {OTHER_WEEKS[ph].map((d, i) => <DayBlock key={i} d={d} />)}
-                </>
-              );
-            })()}
-          </div>
-        )}
-
-        {/* Gym */}
-        {tab === "gym" && (
-          <div>
-            <Card style={{ background: "#100820", border: `1px solid ${C.gym}44` }}>
-              <div style={{ fontSize: 13, fontWeight: 600, color: C.gym, marginBottom: 6 }}>Three full-body sessions, each followed by a bike or a swim</div>
-              <div style={{ fontSize: 12, color: "#B0A0C8", lineHeight: 1.65 }}>
-                Sets and rest come from Rønnestad and Mujika: four to ten repetitions, two to three sets, two to three minutes between sets. The rest periods are the part people cut and the part that makes it work. Lifting moved to the morning, straight after the easy endurance session, because the team owns your afternoons. Endurance first, lifting second, then at least six hours before the evening swim.
-              </div>
-            </Card>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 6, marginBottom: 14 }}>
-              {Object.values(GYM).map((s) => {
-                const on = gym === s.id;
-                return (
-                  <button key={s.id} onClick={() => setGym(s.id)} style={{ background: on ? s.col : C.surface, border: `1px solid ${on ? s.col : C.border}`, borderRadius: 10, padding: "11px 10px", cursor: "pointer", textAlign: "left" }}>
-                    <div style={{ fontSize: 10, fontWeight: 700, color: on ? "rgba(255,255,255,0.65)" : C.muted, marginBottom: 3 }}>{s.day}</div>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: on ? "#FFF" : "#9AB8C8" }}>{s.name}</div>
-                    <div style={{ fontSize: 10, color: on ? "rgba(255,255,255,0.55)" : C.muted, marginTop: 2 }}>{s.emph}</div>
-                  </button>
-                );
-              })}
-            </div>
-            <Card style={{ border: `1px solid ${G.col}44` }}>
-              <div style={{ fontSize: 12, color: "#9AB8C8", lineHeight: 1.6, marginBottom: 12 }}>{G.note}</div>
-              {G.ex.map((ex) => <ExRow key={ex.n} ex={ex} col={G.col} last={lastLift(ex.n)} onLog={(w, r) => logLift(ex.n, w, r)} />)}
-            </Card>
-          </div>
-        )}
-
-        {/* Method */}
-        {tab === "method" && (
-          <div>
-            {METHOD.map((m, i) => (
-              <div key={i} style={{ background: C.surface, border: `1px solid ${m.col}33`, borderRadius: 12, padding: 14, marginBottom: 8 }}>
-                <div style={{ fontSize: 13, fontWeight: 600, color: m.col, marginBottom: 7 }}>{m.t}</div>
-                <div style={{ fontSize: 12, color: "#8AA8B8", lineHeight: 1.7 }}>{m.b}</div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Targets */}
-        {tab === "targets" && (
-          <div>
-            <Card>
-              <Eyebrow>Your two intensities</Eyebrow>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                <div style={{ background: "#0A1218", borderRadius: 10, padding: 12, border: `1px solid ${C.p2}33` }}>
-                  <div style={{ fontSize: 12.5, fontWeight: 700, color: C.p2, marginBottom: 6 }}>Easy · under 155 bpm</div>
-                  <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.7 }}>
-                    Run {ATHLETE.z2.run}<br />Bike {ATHLETE.z2.bike}<br />Swim {ATHLETE.z2.swim}
-                  </div>
-                  <div style={{ fontSize: 11, color: C.muted, marginTop: 7, lineHeight: 1.5 }}>Measured at 140 bpm running 5:30/km, which is where it should be.</div>
-                </div>
-                <div style={{ background: "#0A1218", borderRadius: 10, padding: 12, border: `1px solid ${C.race}33` }}>
-                  <div style={{ fontSize: 12.5, fontWeight: 700, color: C.race, marginBottom: 6 }}>Golden zone · {ATHLETE.golden.hr}</div>
-                  <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.7 }}>
-                    Run {ATHLETE.golden.run}<br />Swim {ATHLETE.golden.swim}<br />Lactate {ATHLETE.golden.lactate}
-                  </div>
-                  <div style={{ fontSize: 11, color: C.muted, marginTop: 7, lineHeight: 1.5 }}>Sit just below threshold, never on it. Two repetitions left in the tank at the end.</div>
-                </div>
-              </div>
-            </Card>
-
-            <Card>
-              <Eyebrow>Where you are starting</Eyebrow>
-              {ATHLETE.prs.map((r, i) => (
-                <div key={i} style={{ padding: "8px 0", borderTop: i ? `1px solid ${C.border}` : "none" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12 }}>
-                    <span style={{ fontWeight: 600 }}>{r[0]}</span><span style={{ color: C.p1 }}>{r[1]}</span>
-                  </div>
-                  <div style={{ fontSize: 11, color: C.muted, marginTop: 2 }}>{r[2]}</div>
-                </div>
-              ))}
-            </Card>
-
-            <Card>
-              <Eyebrow>Phase targets</Eyebrow>
-              <div style={{ overflowX: "auto" }}>
-                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11.5, minWidth: 520 }}>
-                  <thead><tr style={{ borderBottom: `2px solid ${C.border}` }}>
-                    {["Metric", "Now", "P1", "P2", "P3", "P4", "P5", "Race"].map((h, i) => (
-                      <th key={h} style={{ padding: 8, textAlign: i === 0 ? "left" : "center", fontSize: 9.5, fontWeight: 700, color: i === 7 ? C.race : C.muted }}>{h}</th>
-                    ))}
-                  </tr></thead>
-                  <tbody>
-                    {[
-                      ["Swim per 100 m", "1:52", "1:44", "1:38", "1:32", "1:25", "1:21", "1:20"],
-                      ["Swim 1.9 km", "35:48", "33:04", "31:00", "29:00", "26:45", "25:40", "25:20"],
-                      ["Bike pace", "~25 km/h", "27", "29", "32", "34", "35", "36 km/h"],
-                      ["Bike 90 km", "3:36", "3:20", "3:06", "2:49", "2:39", "2:34", "2:30"],
-                      ["Run per km", "5:29", "5:05", "4:52", "4:38", "4:24", "4:18", "4:16"],
-                      ["Half marathon", "1:56", "1:47", "1:42", "1:37", "1:32", "1:30", "1:30"],
-                      ["70.3 total", "~5:15", "~4:55", "~4:42", "~4:22", "~4:06", "~4:00", "4:00–4:45"],
-                      ["Gym days per week", "3", "3", "3", "3", "2", "2", "1"],
-                    ].map((r, i) => (
-                      <tr key={i} style={{ borderBottom: `1px solid ${C.border}` }}>
-                        <td style={{ padding: "9px 8px", fontWeight: 600, whiteSpace: "nowrap" }}>{r[0]}</td>
-                        {r.slice(1).map((v, j) => (
-                          <td key={j} style={{ padding: "9px 8px", textAlign: "center", fontWeight: j === 6 ? 700 : 400, color: j === 6 ? C.race : j === 0 ? C.muted : [C.p1, C.p2, C.p3, C.p4, C.p5][j - 1] || C.text }}>{v}</td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </Card>
-          </div>
-        )}
-
-        {/* Sunday review */}
-        {tab === "review" && (
-          <div>
-            <Card style={{ background: "#0D1E30", border: `1px solid ${C.p1}44` }}>
-              <div style={{ fontSize: 13, fontWeight: 600, color: "#5AAEE0", marginBottom: 6 }}>Reviewing week {W.n}</div>
-              <div style={{ fontSize: 12, color: "#7A9AB8", lineHeight: 1.65 }}>Enter what you actually did, not what was written. Then compare against week {nextW.n} below and decide whether to take it, repeat, or cut.</div>
-            </Card>
-            <Card>
-              <Eyebrow>What you did</Eyebrow>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 8, marginBottom: 10 }}>
-                {[["swim", "Swim km"], ["bike", "Bike hours"], ["run", "Run km"], ["hours", "Total hours"]].map(([k, l]) => (
-                  <div key={k}><div style={{ fontSize: 10.5, color: C.muted, marginBottom: 4 }}>{l}</div>
-                    <input value={form[k]} onChange={(e) => setForm({ ...form, [k]: e.target.value })} inputMode="decimal" style={input} /></div>
-                ))}
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8, marginBottom: 10 }}>
-                {[["rhr", "Avg resting bpm"], ["sleep", "Avg sleep hours"], ["feel", "How it felt, 1 to 5"]].map(([k, l]) => (
-                  <div key={k}><div style={{ fontSize: 10.5, color: C.muted, marginBottom: 4 }}>{l}</div>
-                    <input value={form[k]} onChange={(e) => setForm({ ...form, [k]: e.target.value })} inputMode="decimal" style={input} /></div>
-                ))}
-              </div>
-              <input value={form.txt} onChange={(e) => setForm({ ...form, txt: e.target.value })} placeholder="Anything that hurt, any session you cut, anything that surprised you" style={{ ...input, marginBottom: 10 }} />
-              <button onClick={saveWeek} style={{ background: C.p1, border: "none", borderRadius: 7, color: "#FFF", fontSize: 12, fontWeight: 600, padding: "9px 16px", cursor: "pointer" }}>Save week {W.n}</button>
-            </Card>
-
-            <Card style={{ border: `1px solid ${nextW.type === "deload" ? C.ok : C.p2}55` }}>
-              <Eyebrow col={nextW.type === "deload" ? C.ok : C.p2}>Week {nextW.n} is a {nextW.type} week</Eyebrow>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 8, marginTop: 4 }}>
-                {[["Swim", `${nextW.swim} km`], ["Bike", `${Math.floor(nextW.bike / 60)}h${String(nextW.bike % 60).padStart(2, "0")}`], ["Run", `${nextW.run} km`], ["Long run", `${nextW.long} km`]].map(([k, v]) => (
-                  <div key={k} style={{ background: C.dim, borderRadius: 8, padding: "9px 10px" }}>
-                    <div style={{ fontSize: 10.5, color: C.muted }}>{k}</div>
-                    <div style={{ fontSize: 15, fontWeight: 700, color: nextW.type === "deload" ? C.ok : C.p2, marginTop: 2 }}>{v}</div>
-                  </div>
-                ))}
-              </div>
-              <div style={{ fontSize: 11.5, color: C.muted, lineHeight: 1.65, marginTop: 10 }}>
-                Repeat this week instead of advancing if your resting rate ran 7 bpm above normal, if you rated the week a 1 or 2, if you cut more than two sessions, or if anything hurt in a way that changed how you moved. None of those are failures. Advancing on top of them is.
-              </div>
-            </Card>
-
-            {Object.keys(data.weeks).length > 0 && (
-              <Card>
-                <Eyebrow>Logged weeks</Eyebrow>
-                {Object.entries(data.weeks).sort().map(([k, v]) => (
-                  <div key={k} style={{ borderTop: `1px solid ${C.border}`, padding: "8px 0", fontSize: 12, lineHeight: 1.5 }}>
-                    <span style={{ color: C.muted, marginRight: 10 }}>{k}</span>
-                    {v.swim && <span style={{ color: C.swim, marginRight: 10 }}>{v.swim} km swim</span>}
-                    {v.bike && <span style={{ color: C.bike, marginRight: 10 }}>{v.bike} h bike</span>}
-                    {v.run && <span style={{ color: C.run, marginRight: 10 }}>{v.run} km run</span>}
-                    {v.rhr && <span style={{ color: C.muted, marginRight: 10 }}>{v.rhr} bpm</span>}
-                    {v.feel && <span style={{ color: C.muted }}>felt {v.feel}/5</span>}
-                    {v.txt && <div style={{ fontSize: 11.5, color: C.muted, marginTop: 2 }}>{v.txt}</div>}
-                  </div>
-                ))}
-              </Card>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 </script>
 </body>
 </html>
